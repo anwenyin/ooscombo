@@ -7,30 +7,43 @@ source('supfun.r')
 source('feval.r')
 
 
-#####################################################
-##############  on Goyal-Welch Data #######################
+#############################################################
+##############  Goyal-Welch 2008 Data #######################
+#############################################################
 
-gw <- read.xlsx2("gw.xlsx", sheetIndex=2,colClasses=rep('numeric',22)) # sheetIndex 1: monthly data, 2: quarterly, 3: annual data
+# sheet 1: monthly data, 1704 obs, 18 col
+# sheet 2: quarterly data, 568 obs, 22 col
+# sheet 3: annual data, 142 obs, 21 col
+
+# This exercise follows Rapach, Strauss and Guo 2010 RFS results
+
+gw <- read.xlsx2("gw.xlsx", sheetIndex=2,colClasses=rep('numeric',22))
+
+# RSG uses quarterly data from 1947:Q1 to 2005:Q4, they use 3 OOS periods
+# OOS-1: P = 164, 1965:Q1 - 2005:Q4
+# OOS-2: P = 120, 1976:Q1 - 2005:Q4
+# OOS-3: P = 24,  2000:Q1 - 2005:Q4
+
 dta <- gw[305:540,] #1947.1 - 2005.4, Zhou and Rapach Sample
 
-n <- nrow(dta)
+n <- nrow(dta) # 236 obs
 P<-120
 
-e.ret <- dta$CRSP_SPvwx-dta$Rfree
+e.ret <- dta$CRSP_SPvwx-dta$Rfree # excess return
 
 dy<-numeric(n)
 for (i in 1:n){
-  dy[i]<-log(dta$D12[i+1])-log(dta$Index[i])
+  dy[i]<-log(dta$D12[i+1])-log(dta$Index[i]) # log dividend-yield ratio
 }
 
 
 
-dp<-(log(dta$D12)-log(dta$Index)) # divident price ratio
-ep<-(log(dta$E12)-log(dta$Index)) # earnings price ratio
-de<-(log(dta$D12)-log(dta$E12)) #dividend payout ratio
+dp<-(log(dta$D12)-log(dta$Index)) # log divident price ratio
+ep<-(log(dta$E12)-log(dta$Index)) # log earnings price ratio
+de<-(log(dta$D12)-log(dta$E12)) #log dividend payout ratio
 
 svar<-dta$svar # stock variance
-csp<-dta$csp # cross sectional premium
+csp<-dta$csp # cross sectional premium, NaN end of sample
 bm<-dta$b.m # book to market ratio
 ntis<-dta$ntis # net equity expansiongw
 
@@ -56,7 +69,7 @@ dfy<-dfy[-n]
 dfr<-dfr[-n]
 infl<-infl[-n]
 
-theta<-0.9
+theta<-1 # Stock-Watson combination discount factor
 feval(y=e.ret,X=dy,P=P, theta=theta,Window='recursive')$mat
 feval(y=e.ret,X=dp,P=P, theta=theta,Window='recursive')$mat
 feval(y=e.ret,X=ep,P=P, theta=theta,Window='recursive')$mat
@@ -69,7 +82,7 @@ feval(y=e.ret,X=dfr,P=P, theta=theta,Window='recursive')$mat
 feval(y=e.ret,X=infl,P=P, theta=theta,Window='recursive')$mat  
 
 
-##### Multi-variable Model  
+##### Kitchen Sink Model  ####
 
 X<-cbind(dy,dp,ep,de,svar,bm,ntis,dfy,dfr,infl)
 # check and compare forecasts
