@@ -77,6 +77,9 @@ feval<-function(y,X,P,theta=1,Window=c("recursive","rolling")) {
     y.bic <- rowSums(Xp*beta.bic) # Bayesian model averaging
     y.sw <- rowSums(Xp*beta.sw) # Stock-Watson weighting with discount factor 1
     
+    forecasts <- cbind(y.cv,y.gcv,y.bic,y.sw,y.equal,y.break,y.stable)
+    colnames(forecasts) <- c("Cp","CV","SIC","StockWatson","Equal","Break","Stable")
+    
     RMSFE.cv <- round(sqrt(sum((yp - y.cv)^2)/P),3)
     RMSFE.gcv <- round(sqrt(sum((yp - y.gcv)^2)/P),3)
     RMSFE.stable <- round(sqrt(sum((yp - y.stable)^2)/P),3)
@@ -89,8 +92,8 @@ feval<-function(y,X,P,theta=1,Window=c("recursive","rolling")) {
                           RMSFE.cv/RMSFE.equal, RMSFE.gcv/RMSFE.equal,RMSFE.bic/RMSFE.equal,RMSFE.sw/RMSFE.equal,RMSFE.equal/RMSFE.equal,RMSFE.stable/RMSFE.equal,RMSFE.break/RMSFE.equal),c(2,7),byrow=T),3)
     colnames(mat) <- c("Cp","CV","SIC","S-W","Equal","Stable","Break")
     rownames(mat) <- c("RMSFE","Ratio")
-    group <- list(mat, all.weight)
-    names(group) <- c("mat","weight")
+    group <- list(mat, all.weight,forecasts)
+    names(group) <- c("mat","weight","forecast")
     return(invisible(group))
     # mat<-xtable(mat)
     # print(mat, sanitize.text.function = function(x){x})
