@@ -118,5 +118,5 @@ sfe.combo <- (yp - f.combo)^2
        
 plot.ts(cumsum(feval(y=e.ret,X=0,P=P)$sfe[,'Stable'])-cumsum(sfe.combo),col=4,ylab="CSFE Diff",main=paste('D-Combo',method));abline(h=0,col=2,lty=2)       
        
-       
+CT.R2.CV <- 100*(1 - sum(sfe.combo)/sum(feval(y=e.ret,X=0,P=P)$sfe[,'Stable'])) # CV is better than Cp      
        
