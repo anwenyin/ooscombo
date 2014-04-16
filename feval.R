@@ -56,7 +56,7 @@ feval<-function(y,X,P,theta=1,Window=c("recursive","rolling")) {
         beta.gcv[i] <- wgcv[i]*bmodel.oos$Beta[i] + (1 - wgcv[i])*smodel.oos$Beta[i]
         beta.bic[i] <- wb[i]*bmodel.oos$Beta[i] + (1 - wb[i])*smodel.oos$Beta[i]
         beta.sw[i] <- wsw[i]*bmodel.oos$Beta[i] + (1 - wsw[i])*smodel.oos$Beta[i]
-      }	
+      }  
       
       all.weight <- cbind(wcv,wgcv,wb,wsw)
       colnames(all.weight) <- c("Cp","CV","SIC","S-W")
@@ -82,7 +82,7 @@ feval<-function(y,X,P,theta=1,Window=c("recursive","rolling")) {
       
       sfe <- cbind(SFE.cv,SFE.gcv,SFE.bic,SFE.sw,SFE.equal,SFE.break,SFE.stable)
       colnames(sfe) <- c("Cp","CV","SIC","S-W","Equal","Break","Stable")
-           
+      
       RMSFE.cv <- round(sqrt(sum((yp - y.cv)^2)/P),3)
       RMSFE.gcv <- round(sqrt(sum((yp - y.gcv)^2)/P),3)
       RMSFE.stable <- round(sqrt(sum((yp - y.stable)^2)/P),3)
