@@ -1,3 +1,4 @@
+
 pbar.val <- function(k,pi1=0.15){
   k <- as.numeric(k)
   if (k > 19) stop("k must be less than 20!")
@@ -7,6 +8,20 @@ pbar.val <- function(k,pi1=0.15){
 
 sse <- function(tau,Y,X,bound = 0.15){
   if(tau > 1 - bound || tau < bound) stop("The break fraction tau must fall into the bounded interval")
+  
+  if(X == 0){
+    n <- length(Y)
+    tau <- floor(tau*n)
+    Y1 <- Y[1:tau]
+    Y2 <- Y[(tau+1):n]
+    pre <- lm(Y1~1)
+    post <- lm(Y2~1)
+    beta1 <- pre$coef
+    beta2 <- post$coef
+    sse.b <- sum((Y1-beta1)^2) + sum((Y2 - beta2)^2)
+    return(sse.b)
+  }
+  
   n <- length(Y)
   tau <- floor(tau*n)
   Y1 <- Y[1:tau]
