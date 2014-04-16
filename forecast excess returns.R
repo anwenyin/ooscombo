@@ -27,15 +27,12 @@ gw <- read.xlsx2("gw.xlsx", sheetIndex=2,colClasses=rep('numeric',22))
 dta <- gw[305:540,] #1947.1 - 2005.4, Zhou and Rapach Sample
 
 n <- nrow(dta) # 236 obs
-P<-120
+P<-24
 
-e.ret <- dta$CRSP_SPvwx-dta$Rfree # excess return
-
-dy<-numeric(n)
-for (i in 1:n){
-  dy[i]<-log(dta$D12[i+1])-log(dta$Index[i]) # log dividend-yield ratio
-}
-
+dta.ret <- ts(gw[304:540,])
+ret <- (dta.ret[,'Index'] + dta.ret[,'D12'])/lag(dta.ret[,'Index'],k=-1)-1
+e.ret <- log1p(ret)-log1p(dta$Rfree) # excess return
+dy <- log(dta.ret[,'D12'])-log(lag(dta.ret[,'Index'],-1))
 
 
 dp<-(log(dta$D12)-log(dta$Index)) # log divident price ratio
@@ -96,7 +93,7 @@ plot.ts(cumsum(feval(y=e.ret,X=0,P=P)$sfe[,'Stable'])-cumsum(feval(y=e.ret,X=dfr
 plot.ts(cumsum(feval(y=e.ret,X=0,P=P)$sfe[,'Stable'])-cumsum(feval(y=e.ret,X=infl,P=P)$sfe[,method]),col=4,ylab="CSFE Diff",main=paste('infl',method));abline(h=0,col=2,lty=2)
 
 ##### Double Combination (equal weight across models) Cumulative Square Forecast Error Comparison relative to stable historical average benchmark #####
-method <- 'CV'
+method <- 'Stable'
 m <- 10
 w <- 1/m
 m1 <- feval(y=e.ret,X=dy,P=P)$forecast[,method]*w
@@ -119,3 +116,4 @@ sfe.combo <- (yp - f.combo)^2
 plot.ts(cumsum(feval(y=e.ret,X=0,P=P)$sfe[,'Stable'])-cumsum(sfe.combo),col=4,ylab="CSFE Diff",main=paste('D-Combo',method));abline(h=0,col=2,lty=2)       
 
 CT.R2.CV <- 100*(1 - sum(sfe.combo)/sum(feval(y=e.ret,X=0,P=P)$sfe[,'Stable'])) # CV is better than Cp      
+CT.R2.CV
