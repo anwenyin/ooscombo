@@ -69,7 +69,7 @@ dfy<-dfy[-n]
 dfr<-dfr[-n]
 infl<-infl[-n]
 
-theta<-1 # Stock-Watson combination discount factor
+theta <- 1 # Stock-Watson combination discount factor
 feval(y=e.ret,X=dy,P=P, theta=theta,Window='recursive')$mat
 feval(y=e.ret,X=dp,P=P, theta=theta,Window='recursive')$mat
 feval(y=e.ret,X=ep,P=P, theta=theta,Window='recursive')$mat
@@ -82,16 +82,41 @@ feval(y=e.ret,X=dfr,P=P, theta=theta,Window='recursive')$mat
 feval(y=e.ret,X=infl,P=P, theta=theta,Window='recursive')$mat  
 
 
-##### Kitchen Sink Model  ####
+##### Indivisual Cumulative Square Forecast Error Comparison relative to stable historical average benchmark #####
+method <- 'Equal'
+plot.ts(cumsum(feval(y=e.ret,X=0,P=P)$sfe[,'Stable'])-cumsum(feval(y=e.ret,X=dy,P=P)$sfe[,method]),col=4,ylab="CSFE Diff",main=paste('dy',method));abline(h=0,col=2,lty=2)
+plot.ts(cumsum(feval(y=e.ret,X=0,P=P)$sfe[,'Stable'])-cumsum(feval(y=e.ret,X=dp,P=P)$sfe[,method]),col=4,ylab="CSFE Diff",main=paste('dp',method));abline(h=0,col=2,lty=2)
+plot.ts(cumsum(feval(y=e.ret,X=0,P=P)$sfe[,'Stable'])-cumsum(feval(y=e.ret,X=ep,P=P)$sfe[,method]),col=4,ylab="CSFE Diff",main=paste('ep',method));abline(h=0,col=2,lty=2)
+plot.ts(cumsum(feval(y=e.ret,X=0,P=P)$sfe[,'Stable'])-cumsum(feval(y=e.ret,X=de,P=P)$sfe[,method]),col=4,ylab="CSFE Diff",main=paste('de',method));abline(h=0,col=2,lty=2)
+plot.ts(cumsum(feval(y=e.ret,X=0,P=P)$sfe[,'Stable'])-cumsum(feval(y=e.ret,X=svar,P=P)$sfe[,method]),col=4,ylab="CSFE Diff",main=paste('svar',method));abline(h=0,col=2,lty=2)
+plot.ts(cumsum(feval(y=e.ret,X=0,P=P)$sfe[,'Stable'])-cumsum(feval(y=e.ret,X=bm,P=P)$sfe[,method]),col=4,ylab="CSFE Diff",main=paste('bm',method));abline(h=0,col=2,lty=2)
+plot.ts(cumsum(feval(y=e.ret,X=0,P=P)$sfe[,'Stable'])-cumsum(feval(y=e.ret,X=ntis,P=P)$sfe[,method]),col=4,ylab="CSFE Diff",main=paste('ntis',method));abline(h=0,col=2,lty=2)
+plot.ts(cumsum(feval(y=e.ret,X=0,P=P)$sfe[,'Stable'])-cumsum(feval(y=e.ret,X=dfy,P=P)$sfe[,method]),col=4,ylab="CSFE Diff",main=paste('dfy',method));abline(h=0,col=2,lty=2)
+plot.ts(cumsum(feval(y=e.ret,X=0,P=P)$sfe[,'Stable'])-cumsum(feval(y=e.ret,X=dfr,P=P)$sfe[,method]),col=4,ylab="CSFE Diff",main=paste('dfr',method));abline(h=0,col=2,lty=2)
+plot.ts(cumsum(feval(y=e.ret,X=0,P=P)$sfe[,'Stable'])-cumsum(feval(y=e.ret,X=infl,P=P)$sfe[,method]),col=4,ylab="CSFE Diff",main=paste('infl',method));abline(h=0,col=2,lty=2)
 
-X<-cbind(dy,dp,ep,de,svar,bm,ntis,dfy,dfr,infl)
-# check and compare forecasts
-x1<-dy
-tau1 <- bdate(bound=0.15,Y=e.ret,X=x1)$break.fraction
-bm <- goos(y=e.ret,X=x1,P=60,Window='recursive',Break=TRUE,tau=tau1)
-sm <- goos(y=e.ret,X=x1,P=60,Window='recursive')
+##### Double Combination (equal weight across models) Cumulative Square Forecast Error Comparison relative to stable historical average benchmark #####
+method <- 'CV'
+m <- 10
+w <- 1/m
+m1 <- feval(y=e.ret,X=dy,P=P)$forecast[,method]*w
+m2 <- feval(y=e.ret,X=dp,P=P)$forecast[,method]*w
+m3 <- feval(y=e.ret,X=ep,P=P)$forecast[,method]*w
+m4 <- feval(y=e.ret,X=de,P=P)$forecast[,method]*w
+m5 <- feval(y=e.ret,X=svar,P=P)$forecast[,method]*w
+m6 <- feval(y=e.ret,X=bm,P=P)$forecast[,method]*w
+m7 <- feval(y=e.ret,X=ntis,P=P)$forecast[,method]*w
+m8 <- feval(y=e.ret,X=dfy,P=P)$forecast[,method]*w
+m9 <- feval(y=e.ret,X=dfr,P=P)$forecast[,method]*w
+m10 <- feval(y=e.ret,X=infl,P=P)$forecast[,method]*w
+f.combo <- m1+m2+m3+m4+m5+m6+m7+m8+m9+m10
 
-plot.ts(round(bm$Forecast-sm$Forecast,2),col=2)
-plot.ts(round(bm$Beta[,2]-sm$Beta[,2],2),col=4)
-
-feval(y=e.ret,X=X,P=P, Window='recursive')$mat
+T <- length(e.ret)
+R <- T - P
+yp <- e.ret[(R+1):T]
+sfe.combo <- (yp - f.combo)^2
+       
+plot.ts(cumsum(feval(y=e.ret,X=0,P=P)$sfe[,'Stable'])-cumsum(sfe.combo),col=4,ylab="CSFE Diff",main=paste('D-Combo',method));abline(h=0,col=2,lty=2)       
+       
+       
+       
