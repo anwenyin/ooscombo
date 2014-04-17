@@ -25,11 +25,13 @@ gw <- read.xlsx2("gw.xlsx", sheetIndex=2,colClasses=rep('numeric',22))
 # OOS-3: P = 24,  2000:Q1 - 2005:Q4
 
 dta <- gw[305:540,] #1947.1 - 2005.4, Zhou and Rapach Sample
+#dta <- gw[305:568,] #1947.1 - 2012.4, New Sample
 
 n <- nrow(dta) # 236 obs
 P<-164
 
 dta.ret <- ts(gw[304:540,])
+# dta.ret <- ts(gw[304:568,]) # New Sample
 ret <- (dta.ret[,'Index'] + dta.ret[,'D12'])/lag(dta.ret[,'Index'],k=-1)-1
 e.ret <- log1p(ret)-log1p(dta$Rfree) # excess return
 dy <- log(dta.ret[,'D12'])-log(lag(dta.ret[,'Index'],-1))
@@ -107,7 +109,7 @@ plot.ts(cumsum(feval(y=e.ret,X=0,P=P)$sfe[,'Stable'])-cumsum(feval(y=e.ret,X=dfr
 plot.ts(cumsum(feval(y=e.ret,X=0,P=P)$sfe[,'Stable'])-cumsum(feval(y=e.ret,X=infl,P=P)$sfe[,method]),col=4,ylab="CSFE Diff",main=paste('infl',method));abline(h=0,col=2,lty=2)
 
 ##### Double Combination (equal weight across models) Cumulative Square Forecast Error Comparison relative to stable historical average benchmark #####
-method <- 'Stable'
+method <- 'Cp'
 m <- 14
 w <- 1/m
 m1 <- feval(y=e.ret,X=dy,P=P)$forecast[,method]*w
