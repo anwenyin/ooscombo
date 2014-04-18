@@ -8,7 +8,7 @@
 # delta_gm: parameter controls error standard deviation break size
 
 
-DGP.gm<-function(T,P,Break=FALSE,hetero=FALSE, sigma=2, tau=0.3,delta=1.2,delta_gm=0.5, beta1=0){
+DGP.gm<-function(T,P,Break=FALSE,hetero=FALSE, sigma=2, tau=0.3,delta=0.5,delta_gm=0.5, beta1=0){
   
   if(missing(T)) T <- 100
   if(missing(P)) P <- floor(0.25 * T)
@@ -118,11 +118,15 @@ DGP.gm<-function(T,P,Break=FALSE,hetero=FALSE, sigma=2, tau=0.3,delta=1.2,delta_
       h[1] <- rnorm(1)^2
       e[1] <- v[1]*sqrt(h[1])
       
-      for (i in 2:(T+B)){
+      for (i in 2:(B+t0)) {
         h[i] <- alpha0 + alpha1*e[i-1]^2 + beta1*h[i-1]
         e[i] <- v[i]*sqrt(h[i])
       }
-      
+      for (i in (B+t0+1):(T+B)) {
+        h[i] <- delta_gm*alpha0 + delta_gm*alpha1*e[i-1]^2 + delta_gm*beta1*h[i-1]
+        e[i] <- v[i]*sqrt(h[i])
+      }
+  
       for (i in 3:(B+t0)) {
         y[i] <- mu + rho1*y[i-1] + rho2*y[i-2] + e[i]
       }
