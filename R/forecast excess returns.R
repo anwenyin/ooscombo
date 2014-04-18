@@ -2,9 +2,9 @@ setwd("U:/gwdata")
 rm(list=ls())
 library(xlsx)
 library(sandwich)
-source('goos.r')
-source('supfun.r')
-source('feval.r')
+source('R/goos.r')
+source('R/feval.r')
+source('R/supfun.r')
 
 
 #############################################################
@@ -17,7 +17,7 @@ source('feval.r')
 
 # This exercise follows Rapach, Strauss and Guo 2010 RFS results
 
-gw <- read.xlsx2("gw.xlsx", sheetIndex=2,colClasses=rep('numeric',22))
+gw <- read.xlsx2("Data/gw.xlsx", sheetIndex=2,colClasses=rep('numeric',22))
 
 # RSG uses quarterly data from 1947:Q1 to 2005:Q4, they use 3 OOS periods
 # OOS-1: P = 164, 1965:Q1 - 2005:Q4

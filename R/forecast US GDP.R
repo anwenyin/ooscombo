@@ -1,12 +1,12 @@
-setwd("U:/gwdata")
+#setwd("U:/gwdata")
 rm(list=ls())
 library(xlsx)
 library(sandwich)
-source('goos.r')
-source('feval.r')
-source('supfun.r')
+source('R/goos.r')
+source('R/feval.r')
+source('R/supfun.r')
 
-gdp <- read.xlsx2("gdp.xlsx", sheetIndex=1,colClasses=rep('numeric',7))
+gdp <- read.xlsx2("Data/gdp.xlsx", sheetIndex=1,colClasses=rep('numeric',7))
 gdp<-gdp[-1:-8,]
 
 ### Quarterly Data, 2009 real dollar ###########

@@ -2,11 +2,11 @@ setwd("U:/gwdata")
 rm(list=ls())
 library(xlsx)
 library(sandwich)
-source('feval.r')
-source('goos.r')
-source('supfun.r')
+source('R/goos.r')
+source('R/feval.r')
+source('R/supfun.r')
 
-unemp <- read.xlsx2("unemploy.xlsx", sheetIndex=1,colClasses=rep('numeric',14))
+unemp <- read.xlsx2("Data/unemploy.xlsx", sheetIndex=1,colClasses=rep('numeric',14))
 unemp <- unemp[,c(-1,-14)]
 une <-t(unemp[1,])
 for (i in 2:nrow(unemp)){

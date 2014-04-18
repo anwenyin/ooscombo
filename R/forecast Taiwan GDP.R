@@ -1,11 +1,11 @@
 rm(list=ls())
 library(xlsx)
 library(sandwich)
-source('goos.r')
-source('feval.r')
-source('supfun.r')
+source('R/goos.r')
+source('R/feval.r')
+source('R/supfun.r')
 
-tw <- read.csv("twgdp.csv")
+tw <- read.csv("Data/twgdp.csv")
 
 ### Quarterly Data, 2006 real NTW dollar ###########
 
