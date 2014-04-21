@@ -1,6 +1,6 @@
-
 rm(list=ls())
 source('R/dgp_ar1.R')
+source('R/dgp_ar2.R')
 source('R/dgp_ar2and5.R')
 source('R/dgp_wild.R')
 source('R/goos.R')
@@ -11,16 +11,17 @@ set.seed(1234)
 T <- 5000
 
 #######################################################################################
-#  																				  
-# In this case, the DGP is AR(2) plus 5, but the forecasting model is just AR(1).	  #
+#    																			  
+# In this case, the DGP is AR(2)+ARCH, but the forecasting model is just AR(1).	  #
 #																					  
 #######################################################################################
+
 
 for (i in c(0.01,0.1,0.2,0.3,0.4)){
   for (j in c(30,50)){
     sim <- matrix(nrow=T,ncol=7)
     for (m in 1:T){
-      dta <- DGP.ar2and5(T=200, P=j, Break=TRUE,hetero=TRUE, sigma=2, tau=0.3,delta=i, beta1=0)
+      dta <- DGP.ar2(T=200, P=j, Break=TRUE,hetero=TRUE, sigma=2, tau=0.3,delta=i, beta1=0)
       y <- dta$y
       X <- dta$X[,1]
       temp <- feval(y=y,X=X,P=j,Window='recursive')$mat
@@ -45,18 +46,19 @@ for (i in c(0.01,0.1,0.2,0.3,0.4)){
 
 
 #######################################################################################
-#    																			  
-# In this case, the DGP is AR(2) plus 5, but the forecasting model is just 4 predictors.	  #
+#      																		  
+# In this case, the DGP is AR(2)+GARCH, but the forecasting model is just AR(1).	  #
 #																					  
 #######################################################################################
+
 
 for (i in c(0.01,0.1,0.2,0.3,0.4)){
   for (j in c(30,50)){
     sim <- matrix(nrow=T,ncol=7)
     for (m in 1:T){
-      dta <- DGP.ar2and5(T=200, P=j, Break=TRUE,hetero=TRUE, sigma=2, tau=0.3,delta=i, beta1=0)
+      dta <- DGP.ar2(T=200, P=j, Break=TRUE,hetero=TRUE, sigma=2, tau=0.3,delta=i, beta1=0.2)
       y <- dta$y
-      X <- dta$X[,3:6]
+      X <- dta$X[,1]
       temp <- feval(y=y,X=X,P=j,Window='recursive')$mat
       sim[m,1] <- temp[1,1]
       sim[m,2] <- temp[1,2]
@@ -71,11 +73,10 @@ for (i in c(0.01,0.1,0.2,0.3,0.4)){
     rownames(result) <- c("RMSFE","Ratio")
     result[1,] <-apply(sim,2,mean)
     for (s in 1:7) result[2,s] <- result[1,s]/result[1,5]
-    cat("P = ",j,"delta = ",i,"True: Break Model with ARCH Error, Recursive Window","\n","\n")
+    cat("P = ",j,"delta = ",i,"True: Break Model with GARCH Error, Recursive Window","\n","\n")
     print(round(result,4))
     cat("\n")
   }
 }
 
 print("This simulation is done!")
-

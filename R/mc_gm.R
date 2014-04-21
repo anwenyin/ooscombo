@@ -12,15 +12,15 @@ set.seed(1234)
 T <- 5000
 
 #######################################################################################
-#      																		  #
+#      																		  
 # In this case, the DGP is AR(2), but the forecasting model is just AR(1).	  #
-#																					  #
+#																					  
 #######################################################################################
 
 
 
-for (i in c(0.01,0.1,0.2,0.4)){
-  for (j in c(40)){
+for (i in c(0.01,0.1,0.2,0.3,0.4)){
+  for (j in c(30,50)){
     sim <- matrix(nrow=T,ncol=7)
     for (m in 1:T){
       dta <- DGP.gm(T=200,P=j,Break=TRUE,hetero=FALSE, sigma=4, tau=0.5,delta=i,delta_gm=0.5)
@@ -47,13 +47,13 @@ for (i in c(0.01,0.1,0.2,0.4)){
 }
 
 #######################################################################################
-#        																	  #
+#        																	  
 # One break in the ARCH/GARCH process  #
-#																					  #
+#																					  
 #######################################################################################
 
-for (i in c(0.01,0.1,0.2,0.4)){
-  for (j in c(40)){
+for (i in c(0.01,0.1,0.2,0.3,0.4)){
+  for (j in c(30,50)){
     sim <- matrix(nrow=T,ncol=7)
     for (m in 1:T){
       dta <- DGP.gm(T=200,P=j,Break=TRUE,hetero=TRUE, sigma=4, tau=0.5,delta=i,delta_gm=0.5)
@@ -78,4 +78,6 @@ for (i in c(0.01,0.1,0.2,0.4)){
     cat("\n")
   }
 }
+
+print("This simulation is done!")
 
