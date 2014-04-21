@@ -1,0 +1,60 @@
+\begin{sidewaystable}
+\caption{Single Break DGP, Rolling Window} \label{tb:3}
+\centering
+\begin{adjustbox}{width=\textwidth,totalheight=\textheight,keepaspectratio}
+\begin{threeparttable}
+\begin{tabular}{lcccccccccccccccccc}
+\toprule
+\multicolumn{19}{c}{No Conditional Heteroscedasticity}\\[0.3em]
+ & \multicolumn{6}{c}{$k = 1$} & \multicolumn{6}{c}{$k = 3$} & \multicolumn{6}{c}{$k = 5$} \\
+\cmidrule(r){2-7}
+\cmidrule(r){8-13}
+\cmidrule(r){14-19} \\
+ & \multicolumn{2}{c}{$\delta = 1.1$} & \multicolumn{2}{c}{$\delta = 1.5$} & \multicolumn{2}{c}{$\delta = 2$} & \multicolumn{2}{c}{$\delta = 1.1$} & \multicolumn{2}{c}{$\delta = 1.5$} & \multicolumn{2}{c}{$\delta = 2$} & \multicolumn{2}{c}{$\delta = 1.1$} & \multicolumn{2}{c}{$\delta = 1.5$} & \multicolumn{2}{c}{$\delta = 2$} \\
+\cmidrule(r){2-3}
+\cmidrule(r){4-5}
+\cmidrule(r){6-7}
+\cmidrule(r){8-9}
+\cmidrule(r){10-11}
+\cmidrule(r){12-13}
+\cmidrule(r){14-15}
+\cmidrule(r){16-17}
+\cmidrule(r){18-19}\\
+         &RMSFE &Ratio &RMSFE &Ratio &RMSFE &Ratio &RMSFE &Ratio &RMSFE &Ratio &RMSFE &Ratio &RMSFE &Ratio &RMSFE &Ratio &RMSFE &Ratio \\
+CV       &4.014 &1.000 &4.011 &0.998 &4.016 &0.995 &4.028 &0.999 &4.018 &0.960 &4.015 &0.865 &4.023 &0.982 &4.053 &0.707 &4.049 &0.460 \\
+GCV      &1.101 &1.021 &4.022 &1.001 &4.016 &0.995 &4.195 &1.040 &4.034 &0.964 &4.017 &0.865 &4.050 &0.989 &4.063 &0.709 &4.092 &0.465 \\
+Stable   &4.011 &0.999 &4.037 &1.005 &4.111 &1.018 &4.052 &1.005 &4.658 &1.113 &6.114 &1.317 &4.323 &1.056 &9.026 &1.575 &16.112 &1.830 \\
+Break    &4.028 &1.003 &4.015 &0.999 &4.015 &0.995 &4.035 &1.000 &4.022 &0.961 &4.016 &0.865 &4.026 &0.983 &4.055 &0.707 &4.052 &0.460 \\
+Bayesian &4.015 &1.000 &4.019 &1.000 &4.055 &1.004 &4.035 &1.000 &4.491 &1.073 &5.908 &1.273 &4.194 &1.024 &8.809 &1.537 &15.886 &1.804 \\
+Equal    &4.015 &1.000 &4.018 &1.000 &4.037 &1.000 &4.033 &1.000 &4.184 &1.000 &4.642 &1.000 &4.096 &1.000 &5.732 &1.000 &8.806 &1.000 \\
+\\[0.3em]
+\multicolumn{19}{c}{With Conditional Heteroscedasticity}\\[0.3em]
+ & \multicolumn{6}{c}{$k = 1$} & \multicolumn{6}{c}{$k = 3$} & \multicolumn{6}{c}{$k = 5$} \\
+\cmidrule(r){2-7}
+\cmidrule(r){8-13}
+\cmidrule(r){14-19} \\
+ & \multicolumn{2}{c}{$\delta = 1.1$} & \multicolumn{2}{c}{$\delta = 1.5$} & \multicolumn{2}{c}{$\delta = 2$} & \multicolumn{2}{c}{$\delta = 1.1$} & \multicolumn{2}{c}{$\delta = 1.5$} & \multicolumn{2}{c}{$\delta = 2$} & \multicolumn{2}{c}{$\delta = 1.1$} & \multicolumn{2}{c}{$\delta = 1.5$} & \multicolumn{2}{c}{$\delta = 2$} \\
+\cmidrule(r){2-3}
+\cmidrule(r){4-5}
+\cmidrule(r){6-7}
+\cmidrule(r){8-9}
+\cmidrule(r){10-11}
+\cmidrule(r){12-13}
+\cmidrule(r){14-15}
+\cmidrule(r){16-17}
+\cmidrule(r){18-19}\\
+         &RMSFE &Ratio &RMSFE &Ratio &RMSFE &Ratio &RMSFE &Ratio &RMSFE &Ratio &RMSFE &Ratio &RMSFE &Ratio &RMSFE &Ratio &RMSFE &Ratio \\
+CV       &4.109 &1.001 &4.166 &1.001 &4.106 &0.996 &8.653 &1.000 &8.586 &0.991 &8.774 &0.963 &14.414 &0.999 &14.462 &0.964 &14.503 &0.873 \\
+GCV      &4.560 &1.111 &4.182 &1.005 &4.113 &0.998 &9.728 &1.124 &8.595 &0.991 &8.784 &0.965 &14.466 &1.002 &14.479 &0.965 &14.516 &0.873 \\
+Stable   &4.099 &0.999 &4.173 &1.003 &4.187 &1.016 &8.647 &0.999 &8.924 &1.030 &10.013 &1.100 &14.480 &1.003 &16.539 &1.103 &21.706 &1.306 \\
+Break    &4.128 &1.006 &4.173 &1.003 &4.108 &0.997 &8.703 &1.006 &8.595 &0.992 &8.779 &0.964 &14.464 &1.002 &14.479 &0.965 &14.515 &0.873 \\
+Bayesian &4.104 &1.000 &4.162 &1.000 &4.137 &1.004 &8.653 &1.000 &8.745 &1.009 &9.667 &1.061 &14.436 &1.000 &15.922 &1.061 &20.944 &1.260 \\
+Equal    &4.104 &1.000 &4.161 &1.000 &4.122 &1.000 &8.652 &1.000 &8.667 &1.000 &9.107 &1.000 &14.432 &1.000 &15.001 &1.000 &16.616 &1.000 \\
+\bottomrule
+\end{tabular}
+\begin{tablenotes}[para, flushleft] \footnotesize
+Notes: The sample size is 401 where the last 100 observations are reserved for forecast evaluation. RMSFE is calculated based on 300 repetitions. Our original results have five digits after the decimal point. For publication we have rounded it to three digits.
+\end{tablenotes}
+\end{threeparttable}
+\end{adjustbox}
+\end{sidewaystable} 

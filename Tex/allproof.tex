@@ -1,0 +1,90 @@
+\appendix
+\section{Proof of Theoretical Results}
+\begin{proof}[Proof of Lemma~\ref{lem:1}]
+\begin{eqnarray}
+ \hat{\beta}_{-t}
+& = & (\sum_{i \neq t} x_i x_i')^{-1} (\sum_{i \neq t} x_i y_i) \nonumber \\
+& = & (X'X - x_t x_t')^{-1} (X'Y - x_t y_t) \nonumber \\
+& = & [(X'X)^{-1} + (1 - h_t)^{-1} (X'X)^{-1} x_t x_t' (X'X)^{-1}] (X'Y - x_t y_t)  \nonumber \\
+& = & (X'X)^{-1}X'Y - (X'X)^{-1} x_t y_t + (1 - h_t)^{-1} (X'X)^{-1} x_t x_t' (X'X)^{-1} (X'Y - x_t y_t)  \nonumber \\
+& = & \hat{\beta} - (X'X)^{-1} x_t y_t + (1 - h_t)^{-1} (X'X)^{-1} x_t (x_t' \hat{\beta} - x_t y_t) \nonumber \\
+& = & \hat{\beta} - (1 - h_t)^{-1} (X'X)^{-1} x_t [(1 - h_t) y_t - x_t' \hat{\beta} + h_t y_t] \nonumber \\
+& = & \hat{\beta} - (1 - h_t)^{-1} (X'X)^{-1} x_t \hat{e}_t  \nonumber \\
+\end{eqnarray}
+\begin{eqnarray}
+ \tilde{e}_t
+& = & y_t -x_t' \hat{\beta}_{-t} \nonumber \\
+& = & y_t - x_t' [\hat{\beta} - (1 - h_t)^{-1} (X'X)^{-1} x_t \hat{e}_t ] \nonumber \\
+& = & \hat{e}_t  + (1 - h_t)^{-1} h_t \hat{e}_t  \nonumber \\
+& = & \frac{\hat{e}_t }{1 - h_t}
+\end{eqnarray}
+\end{proof}
+
+\begin{proof}[Proof of Theorem~\ref{thm:1}]
+\begin{eqnarray}
+\frac{1}{T} \sum_{i=1}^T \tilde{e_t}^2 & = & \frac{1}{T} \sum_{i=1}^T \frac{\tilde{e_t}^2}{(1-h_t)^2} \nonumber \\
+                                        & \approx & \frac{1}{T} \sum_{i=1}^T \hat{e_t}^2 + \frac{2}{T} \sum_{i=1}^T \hat{e_t}^2 h_t \nonumber \\
+                                        & = & \hat{\sigma}^2 + \frac{2}{T} \sum_{i=1}^T \hat{e_t}^2 x_t' (X'X)^{-1} x_t \nonumber \\
+                                        & = & \hat{\sigma}^2 + \frac{2}{T} tr[(X'X)^{-1} \sum_{i=1}^T \hat{e_t}^2 x_t'x_t] \nonumber \\
+                                        & = & \hat{\sigma}^2 + 2 \bold{e}' \bold{P} \bold{e}
+\end{eqnarray}
+\end{proof}
+\begin{proof}[Proof of Theorem~\ref{thm:2}]
+We relax the conditional homoscedasticity assumption in Hansen's Mallow's model averaging method when there is a possible structural break in the underlying DGP. The proof is adapted from Hansen \cite{hansen2009averaging} and Andrews \cite{andrews93} without assuming conditional homoscedasticity. The CV penalty term can be expanded as:
+\begin{eqnarray*}
+e'P(k)e & = & e'Pe + e'P^{*}(k)e \\
+        & = & e'Pe + e'X^{*}(k)(X^{*}(k)'X^{*}(k))^{-1}X^{*}(k)'e
+\end{eqnarray*}
+where the notations for $P$,$P^{*}(k)$ and $X^{*}(k)$ are the same as in Hansen \cite{hansen2009averaging}.
+
+For the second term, $e'X^{*}(k)(X^{*}(k)'X^{*}(k))^{-1}X^{*}(k)'e$, we can see
+\begin{eqnarray*}
+X^{*}(k)'X^{*}(k) & = & (X(k)-X(X'X)^{-1}X(k)'X(k))'(X(k)-X(X'X)^{-1}X(k)'X(k)) \\
+                  & = & X(k)'X(k) - X(k)'X(X'X)^{-1}X(k)'X(k) \\
+				  &   & - X(k)'X(k)(X'X)^{-1}X'X(k) + X(k)'X(k)(X'X)^{-1}X(k)'X(k) \\
+				  & \stackrel{P}{\rightarrow} & \pi Q - \pi QQ^{-1} \pi Q - \pi QQ^{-1} \pi Q + \pi QQ^{-1} \pi Q \\
+				  & = & \pi (1-\pi)Q
+\end{eqnarray*}
+
+So by continuous mapping theorem we have $(X^{*}(k)'X^{*}(k))^{-1}\stackrel{P}{\rightarrow}(\pi (1-\pi))^{-1}Q^{-1}$.
+
+\begin{eqnarray*}
+(X(k) - X(X'X)^{-1}X(k)'X(k))'e & = & X(k)'e - X(k)'X(k)(X'X)^{-1}X'e \\
+                                & = & \jia x_t e_t - \jia x_t x_t'(\jian x_t x_t')^{-1}(\jian x_t e_t)
+\end{eqnarray*}
+
+We have:
+
+\begin{eqnarray*}
+\rn \jia x_t e_t - (\frac{1}{n} \jia x_t x_t')(\frac{1}{n} \jian x_t x_t')^{-1}(\rn \jian x_t e_t) & \stackrel{d}{\rightarrow} & W(\pi) - \pi Q Q^{-1}W(1) \\
+                                                                                                   & =                         & W(\pi) - \pi W(1)
+\end{eqnarray*}
+
+\noindent $W(1)$ is a vector of Brownian motion with covariance matrix $\Sigma \equiv \lim\limits_{n\to\infty}$VAR$(\rn\jian X_i e_i)$. Then we have
+
+\begin{eqnarray*}
+e'P^{*}(k)e & = & e'X^{*}(k)(X^{*}(k)'X^{*}(k))^{-1}X^{*}(k)'e \\
+            & \stackrel{P}{\rightarrow} & \frac{1}{\pi(1-\pi)} (W(\pi) - \pi W(1))'Q^{-1}(W(\pi) - \pi W(1)) =  \frac{\mathbf{B}(\pi)'\mathbf{B}(\pi)}{\pi(1-\pi)}\equiv J_0(\xi_{\delta})
+\end{eqnarray*}
+where $\mathbf{B}(\pi)$ is a Brownian bridge. Combined with Hansen's \cite{hansen2009averaging} theorem 1 without assuming conditional homoskedasticity or Andrews' \cite{andrews93} theorem 4,our results follow.
+
+For the first term, $e'Pe$, we can see
+
+\begin{eqnarray*}
+e'Pe & = & (\jian x_t e_t)'(\jian x_t x_t')^{-1}(\jian x_t e_t) \\
+     & \stackrel{d}{\rightarrow} & W(1) Q^{-1} W(1)
+\end{eqnarray*}
+
+Under the assumption of conditional homoskedasticity, the above distribution is a $\chi^2$ distribution times the variance of the population error. If we relax the assumption of conditional homoskedasticity, $e'Pe$ does not converge to a $\chi^2$ distribution, instead, it converges to a weighted sum of $\chi^2$ distribution of one degree of freedom.
+
+For a multivariate normal distribution, $N(0,\Sigma)$, since $\Sigma$ is symmetric and positive definite, we have $\Sigma = TT'$. We also know that $Q^{-1}$ is symmetric and is of the same rank of $\Sigma$,
+by application of lemma 8.2 of \emph{White} \cite{white_mle_textbook} and chapter 5 of \emph{Ravishanker and Dipak} \cite{linear_model_textbook}, we have
+
+\begin{eqnarray*}
+e'Pe & \stackrel{d}{\rightarrow} & \sum_{j=1}^{k} \lambda_j \chi^2(1)
+\end{eqnarray*}
+where $\lambda_j$s are eigenvalues of the matrix $L'Q^{-1}L$, $\Sigma = LL'$. Although the asymptotic distribution is not pivotal, since we are only interested in the mean of this distribution, we can easily obtain its mean by $\mathrm{E}(e'Pe) = \sum_{j=1}^{k} \lambda_j = \tr{(L'Q^{-1}L)} = \tr{(Q^{-1} \Sigma)}$, where $Q$ and $\Sigma$ can be estimated by their sample analogues. This can be done without relying on Monte Carlo simulation.
+\end{proof}
+\begin{proof}[Proof of Lemma~\ref{lem:2}]
+The proof of this lemma follows Hansen\cite{hansen2009averaging}, just replace relevant terms according to Theorem~\ref{thm:2}.
+\end{proof}

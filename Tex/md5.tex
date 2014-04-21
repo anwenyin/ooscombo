@@ -1,0 +1,27 @@
+\begin{table}
+\caption{Model~\ref{md:5}} \label{tb:12}
+\centering
+\begin{adjustbox}{keepaspectratio}
+\begin{threeparttable}
+\begin{tabular}{lcccccccc}
+\toprule
+ & \multicolumn{4}{c}{Recursive Window} & \multicolumn{4}{c}{Rolling Window}\\%[0.3em]
+\cmidrule(r){2-5}
+\cmidrule(r){6-9}\\
+       & CV & GCV & Bayesian & Equal & CV & GCV & Bayesian & Equal \\
+P = 15 &1.041 &0.964 &0.997 & 1.000& 1.069& 0.960& 0.996& 1.000\\
+P = 20 &1.043 &0.960 &0.997 & 1.000& 0.984& 0.944& 0.999& 1.000\\
+P = 25 &1.017 &0.967 &0.998 & 1.000& 1.002& 0.955& 0.998& 1.000\\
+P = 30 &1.032 &0.975 &0.998 & 1.000& 1.025& 1.703& 0.999& 1.000\\
+P = 35 &1.034 &0.973 &0.998 & 1.000& 0.988& 0.964& 1.000& 1.000\\
+P = 40 &1.033 &0.974 &0.998 & 1.000& 1.044& 1.117& 0.997& 1.000\\
+P = 45 &1.037 &0.974 &0.998 & 1.000& 1.039& 1.153& 0.997& 1.000\\
+P = 50 &1.022 &0.988 &0.999 & 1.000& 0.993& 1.106& 1.002& 1.000\\
+\bottomrule
+\end{tabular}
+\begin{tablenotes}[para, flushleft] \footnotesize
+Notes: $\mathrm{P}$ is the size of the prediction sample. Equal weight is chosen as the benchmark and the numbers in the table represent the RMSFE ratio between individual method and equal weight.
+\end{tablenotes}
+\end{threeparttable}
+\end{adjustbox}
+\end{table} 

@@ -1,0 +1,40 @@
+\begin{sidewaystable}
+\caption{No Break DGP, Rolling Window} \label{tb:5}
+\centering
+\begin{adjustbox}{scale=1,keepaspectratio}
+\begin{threeparttable}
+\begin{tabular}{lcccccccccccccccccc}
+\toprule
+\multicolumn{7}{c}{No Conditional Heteroscedasticity}\\[0.3em]
+ & \multicolumn{2}{c}{$k = 1$} & \multicolumn{2}{c}{$k = 3$} & \multicolumn{2}{c}{$k = 5$} \\
+\cmidrule(r){2-3}
+\cmidrule(r){4-5}
+\cmidrule(r){6-7} \\
+         &RMSFE &Ratio &RMSFE &Ratio &RMSFE &Ratio \\
+CV       &3.986 &1.000 &4.045 &1.000 &4.023 &0.998 \\
+GCV      &4.081 &1.024 &4.257 &1.053 &4.198 &1.042 \\
+Stable   &3.982 &0.999 &4.037 &0.998 &4.011 &0.995 \\
+Break    &3.999 &1.003 &4.070 &1.007 &4.079 &1.012 \\
+Bayesian &3.986 &1.000 &4.044 &1.000 &4.031 &1.000 \\
+Equal    &3.986 &1.000 &4.044 &1.000 &4.030 &1.000 \\
+\\[0.3em]
+\multicolumn{7}{c}{With Conditional Heteroscedasticity}\\[0.3em]
+ & \multicolumn{2}{c}{$k = 1$} & \multicolumn{2}{c}{$k = 3$} & \multicolumn{2}{c}{$k = 5$} \\
+\cmidrule(r){2-3}
+\cmidrule(r){4-5}
+\cmidrule(r){6-7} \\
+         &RMSFE &Ratio &RMSFE &Ratio &RMSFE &Ratio \\
+CV       &4.207 &1.002 &8.775 &1.000 &14.429 &0.999 \\
+GCV      &4.434 &1.056 &8.862 &1.009 &14.607 &1.012 \\
+Stable   &4.192 &0.998 &8.758 &0.998 &14.383 &0.996 \\
+Break    &4.225 &1.006 &8.853 &1.008 &14.598 &1.011 \\
+Bayesian &4.199 &1.000 &8.780 &1.000 &14.440 &1.000 \\
+Equal    &4.199 &1.000 &8.779 &1.000 &14.436 &1.000 \\
+\bottomrule
+\end{tabular}
+\begin{tablenotes}[para, flushleft] \footnotesize
+Notes: The sample size is 401 where the last 100 observations are reserved for forecast evaluation. RMSFE is calculated based on 300 repetitions. Our original results have five digits after the decimal point. For publication we have rounded it to three digits.
+\end{tablenotes}
+\end{threeparttable}
+\end{adjustbox}
+\end{sidewaystable}

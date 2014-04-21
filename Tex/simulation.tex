@@ -1,0 +1,90 @@
+\section{Simulation Results}
+Here we are going to evaluate the forecast performance of CV model averaging through controlled numerical simulation. Specifically, we are going to use two designs regarding the true data generating process: (i). an AR(2) process plus five other predictors with ARCH(1) errors, 
+\begin{subequations}
+            \begin{align}
+                y_{t} & = \mu + \rho_{1}y_{t-1} + \rho_{2}y_{t-2} + \sum_{i=1}^{5}\theta_{i}x_{i} + e_{t} \\
+                e_{t} & = v_{t}\sqrt{h_{t}}\\
+                h_{t} & = \alpha_{0} + \alpha_{1}e_{t-1}^2
+            \end{align}
+\end{subequations}
+(ii). an AR(2) process plus two other predictors with heteroscedastic errors drawing from this distribution $N(0,y_{t-1}^2)$. 
+\begin{equation}
+                y_{t} = \mu + \rho_{1}y_{t-1} + \rho_{2}y_{t-2} + \sum_{i=1}^{2}\theta_{i}x_{i} + e_{t}
+\end{equation}
+In both designs there is a one-time structural break in all coefficients happening at the $30\%th$ observation of the training sample $R$, that is, $\tau = 0.3$. The break takes the multiplicative form, for example, if the pre-break coefficient is $\beta$, the post-break parameter becomes $\delta\beta$. Other predictors are drawn i.i.d as the following: $x_{1} \sim \mathrm{N}(0,4)$, $x_{2} \sim \mathrm{U}[-2,2]$, $x_{3} \sim \mathrm{N}(0,16)$, $x_{4} \sim \mathrm{t}(5)$ and $x_{5} \sim \mathrm{Binomial}(1,0.02)$. The parameter values are $\mu = 2, \rho_{1} = 0.4, \rho_{2} = 0.2$, $\theta_{1} = 0.8,\theta_{2} = -0.4,\theta_{3} = 2,\theta_{4} = -3.5,\theta_{5} = 10$, $\alpha_{0} = 1, \alpha_{1} = 0.4$. These values are chosen to satisfy the stationarity and ARCH error regularity assumptions.
+
+To make our simulation design close to relevant empirical studies and to capture the difficulty many researchers face when finding the best approximating models, the model used to forecast differs from the data generating process: in case (i) the model to forecast is a simple AR(1) with intercept, $y_{t} = \mu + \rho_{1}y_{t-1} + e_{t}$; in case (ii) the model to forecast does not involve the AR component, $y_{t} = \mu + \sum_{i=1}^{2}\theta_{i}x_{i} + e_{t}$.
+
+For each case, we examine the out-of-sample (OOS) forecasting performance by comparing the relative root mean-squared forecast error divided by that of the equal weights method. Recursive window is used to generate OOS forecasts as it mimics the practice that forecasters update their forecast when new data becomes available. Out-of-sample forecasting is conducted by the following step. We split the sample into two parts: the prediction sample and the evaluation sample. Under the recursive window, at each point in time, the estimated parameter is updated by adding one more observation. For example, $\beta_{t} = (\sum_{s=1}^{t-1} x_{s} x_{s}')^{-1}\sum_{s=1}^{t-1}x_{s}y_{s+1},\beta_{t+1} = (\sum_{s=1}^{t} x_{s} x_{s}')^{-1}\sum_{s=1}^{t}x_{s}y_{s+1}$.
+
+The total sample size, $T$, is $200$\footnote{This sample size is chosen to be relevant to most macroeconomic time series.}. In our pseudo one-step ahead out-of-sample forecasting simulation, we reserve the first $170$ or $150$ ($R = 301$ or $R = 150$) observations as the training sample and the rest as the prediction sample ($P = 30$ or $P = 50$). For the break model, we use the post-break window method to forecast out-of-sample. Other techniques, such as the optimal window method proposed by Pesaran and Timmermann \cite{pesaran_timmermann_JE2007} or the robust weight method proposed by Pesaran, Pick and Pranovich \cite{pesaran_pick_pranovich_2011} could also be considered. For simplicity, we only use the post-break window method in this paper \footnote{Currently, researchers are sill working on developing theory and methods related to forecasting with breaks, and we are not aware of any dominant method that performs well in most situations faced by practitioners. The simulation conducted by Pesaran and Timmermann suggests that there is little gain from complicated methods. The simple rule, to forecast using the data after the detected break, seems to work as well as anything else.}.
+
+In each case, to evaluate and compare performance, we produce forecasts using six methods:
+\begin{inparaenum}[(i)]
+\item Mallows' model averaging (\textbf{Cp});
+\item CV model averaging (\textbf{CV});
+\item Bayesian model averaging\footnote{We call this method ``Bayesian'' not in a strict sense: the Bayesian weight for each model is calculated based on the value of the Schwarz-Bayesian information criterion, i.e. the weight for the beak model is $w_{b} = \exp{(SIC^{b})}/(\exp{(SIC^{b})} + \exp{(SIC^{s})})$} (\textbf{SIC});
+\item stable model (\textbf{Stable});
+\item break model (\textbf{Break}); and
+\item equal weights\footnote{Each model receives weight of $0.5$.} (\textbf{Equal}).
+\end{inparaenum}
+We compare their forecast performance by root mean-square forecast error (\textbf{RMSFE}). For ease of comparison, we pick the equal weight method as the benchmark\footnote{The reason to pick equal weights as the benchmark is because of the aforementioned forecast combination puzzle: equally weighted forecasts tend to perform better than other complicated methods in many applications. The puzzle is generally discussed in the forecasting literature without allowing breaks. In this study we try to examine whether it dominates our method when facing structural breaks.} and compute the relative performance (\textbf{Ratio}) for each method, for example, RMSFE\textsuperscript{CV}/RMSFE\textsuperscript{Equal Weight}. If the ratio is less than one, it indicates better performance than equal weights.
+\subsection{Design I}
+\begin{table}
+    \caption{Monte Carlo Simulation: Design I} \label{ntb:1}
+    \centering
+    \begin{adjustbox}{width=\textwidth,totalheight=\textheight,keepaspectratio}
+    \begin{threeparttable}
+    \begin{tabular}{ccccccccccc}
+    \toprule
+     & \multicolumn{5}{c}{$P = 30$} & \multicolumn{5}{c}{$P = 50$} \\
+    \cmidrule(r){2-6}
+    \cmidrule(r){7-11} \\
+      Break Size   & Cp     &   CV   & SIC    & Stable & Break  & Cp     & CV     & SIC    & Stable & Break \\
+             $100$ & 0.9619 & 0.9476 & 1.0053 & 1.1601 & 0.9478 & 0.9647 & 0.9533 & 1.0057 & 1.1485 & 0.9535 \\
+             $20$  & 0.9666 & 0.9541 & 1.0049 & 1.1461 & 0.9543 & 0.9680 & 0.9573 & 1.0052 & 1.1389 & 0.9576 \\
+             $10$  & 0.9729 & 0.9625 & 1.0039 & 1.1242 & 0.9627 & 0.9747 & 0.9649 & 1.0041 & 1.1182 & 0.9651 \\
+             $5$   & 0.9825 & 0.9761 & 1.0024 & 1.0880 & 0.9763 & 0.9836 & 0.9770 & 1.0025 & 1.0836 & 0.9772 \\
+             $3$   & 0.9894 & 0.9861 & 1.0014 & 1.0603 & 0.9863 & 0.9896 & 0.9868 & 1.0015 & 1.0579 & 0.9870 \\
+    \bottomrule
+    \end{tabular}
+    \begin{tablenotes}[para, flushleft] \footnotesize
+    Notes: The DGP is $y_{t} = \mu + \rho_{1}y_{t-1} + \rho_{2}y_{t-2} + \sum_{i=1}^{5}\theta_{i}x_{i} + e_{t}, e_{t} = v_{t}\sqrt{h_{t}}, h_{t} = \alpha_{0} + \alpha_{1}e_{t-1}^2$ and the forecasting model is $y_{t} = \mu + \rho_{1}y_{t-1} + e_{t}$. $\mathrm{P}$ is the evaluation sample size, total sample size is $200$, break fraction relative to the training sample is $\tau = 0.3$, OOS forecasts are generated by the recursive window, 5000 times replication. Equal weight is chosen as the benchmark and the numbers in the table represent the RMSFE ratio between each individual method and equal weight. Cp: Mallows' weights. CV: cross-validation weights. SIC: Schwarz-Bayesian weights. Stable: model without structural break. Break: model with a full structural break.
+    \end{tablenotes}
+    \end{threeparttable}
+    \end{adjustbox}
+\end{table}
+Simulation results for the ARCH error design are presented in table \ref{ntb:1}. We can see from the table that CV forecasts better than Cp across break sizes and prediction sample sizes. Both of their relative RMSFE decreases monotonically as the break size increases, but CV decreases at a slightly faster speed. Bayesian weighting does almost the same as equal weight, but its performance deteriorates when the break size becomes large. It should not be a surprise that the break model does well as structural break indeed happens in the DGP, but it performs slightly worse than CV because it does not take the high volatility into account.
+
+Our results indicate that when there is ARCH type conditional heteroscedasticity in the data and when the break is not strictly dominated by the volatility, CV forecasts better than Mallows' model averaging. Additionally, CV forecasts better than equal weight so the combination puzzle is solved in this design. Bayesian model averaging is approximately equivalent to equal weight. Compared with CV, Bayesian weighting method does not put more weight on the proper model even the break size increases.
+
+It is worth mentioning that in our design, the post-break coefficients become smaller than their pre-break counterparts by various times. This procedure is adopted to ensure that piece-wise stationarity is maintained with the structural break. \footnote{The simulation results stay the same if we reverse the break size direction by starting with smaller pre-break parameter values.}
+\subsection{Design II}
+\begin{table}
+    \caption{Monte Carlo Simulation: Design II} \label{ntb:2}
+    \centering
+    \begin{adjustbox}{width=\textwidth,totalheight=\textheight,keepaspectratio}
+    \begin{threeparttable}
+    \begin{tabular}{ccccccccccc}
+    \toprule
+     & \multicolumn{5}{c}{$P = 30$} & \multicolumn{5}{c}{$P = 50$} \\
+    \cmidrule(r){2-6}
+    \cmidrule(r){7-11} \\
+    Break Size      & Cp     & CV     & SIC    & Stable & Break  & Cp     & CV     & SIC    & Stable & Break  \\
+    $100$           & 0.4940 & 0.2613 & 1.0662 & 1.9402 & 0.2615 & 0.5800 & 0.3465 & 1.0610 & 1.8888 & 0.3464 \\
+    $20$            & 0.5692 & 0.3701 & 1.0583 & 1.8588 & 0.3704 & 0.6371 & 0.4035 & 1.0539 & 1.8292 & 0.4037 \\
+    $10$            & 0.7957 & 0.4304 & 1.0249 & 1.7880 & 0.4308 & 0.7217 & 0.6641 & 1.0430 & 1.6049 & 0.6644 \\
+    $5$             & 0.8594 & 0.7563 & 1.0169 & 1.4582 & 0.7565 & 0.8163 & 0.7780 & 1.0273 & 1.4154 & 0.7781 \\
+    $3$             & 0.9232 & 0.7930 & 1.0058 & 1.3326 & 0.7931 & 0.8827 & 0.8498 & 1.0156 & 1.2671 & 0.8502 \\
+    \bottomrule
+    \end{tabular}
+    \begin{tablenotes}[para, flushleft] \footnotesize
+    Notes: The DGP is $y_{t} = \mu + \rho_{1}y_{t-1} + \rho_{2}y_{t-2} + \sum_{i=1}^{2}\theta_{i}x_{i} + e_{t}, e_{t} \sim \mathrm{N}(0, y_{t-1}^{2})$ and the forecasting model is $y_{t} = \mu + \sum_{i=1}^{2}\theta_{i}x_{i} + e_{t}$. $\mathrm{P}$ is the evaluation sample size, total sample size is $200$, break fraction relative to the training sample is $\tau = 0.3$, OOS forecasts are generated by the recursive window, 5000 times replication. Equal weight is chosen as the benchmark and the numbers in the table represent the RMSFE ratio between each individual method and equal weight. Cp: Mallows' weights. CV: cross-validation weights. SIC: Schwarz-Bayesian weights. Stable: model without structural break. Break: model with a full structural break.
+    \end{tablenotes}
+    \end{threeparttable}
+    \end{adjustbox}
+\end{table}
+Simulation results for the other design are shown in table \ref{ntb:2}. Again we can see from the table that CV forecasts better than Cp across break sizes and prediction sample sizes. Both of their relative RMSFE decreases monotonically as the break size increases, but in this design CV's RMSFE decreases at a much faster speed. Bayesian weighting does almost the same as equal weight, but its performance deteriorates when the break size becomes large.
+
+Our results indicate that when there is wild-type heteroscedasticity in the data as modeled in the DGP and when the break is not strictly dominated by the volatility, CV forecasts much better than Mallows' model averaging. Additionally, CV forecasts better than equal weight so the combination puzzle is solved in this design. Bayesian model averaging is approximately equivalent to equal weight. Again, compared with CV, Bayesian weighting method does not put more weight on the proper model when the break size increases.
+

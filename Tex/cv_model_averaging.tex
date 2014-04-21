@@ -1,0 +1,307 @@
+\documentclass[a4paper,12pt]{article}
+\usepackage{amsmath}
+\usepackage{amsfonts}
+\usepackage{amsthm}
+\usepackage{amssymb}
+\usepackage{fixltx2e}
+\usepackage{graphicx}
+\usepackage{booktabs}
+\usepackage{threeparttable}
+\usepackage{tabularx}
+\usepackage{hyperref}
+\usepackage{multirow}
+\usepackage{paralist} % inline list
+\usepackage{color}
+\usepackage[margin=1.25in]{geometry}
+\usepackage{verbatim}
+\usepackage{rotating}
+\usepackage{url}
+\usepackage{setspace}
+\usepackage{adjustbox}
+\hypersetup{
+	colorlinks=true,
+	urlcolor=blue,
+	linkcolor=blue,
+	citecolor=blue
+}
+\newcommand{\jia}{\sum_{i=1}^{[T \pi]}}
+\newcommand{\jian}{\sum_{i=1}^{[T]}}
+\newcommand{\rn}{\frac{1}{\sqrt{T}}}
+
+\DeclareMathOperator{\tr}{tr}
+\DeclareMathOperator{\var}{var}
+\DeclareMathOperator{\cov}{cov}
+\DeclareMathOperator*{\argmin}{arg\,min}
+
+
+\begin{document}
+\newtheorem{theorem}{Theorem}[section]
+\newtheorem{lemma}[theorem]{Lemma}
+\newtheorem{proposition}[theorem]{Proposition}
+\newtheorem{corollary}[theorem]{Corollary}
+\newtheorem{Assumption}{Assumption}
+
+\title{Out-of-Sample Forecast Model Averaging with Parameter Instability}
+\author{Anwen Yin\thanks{The author thanks Joydeep Bhattacharya, Helle Bunzel, Gray Calhoun, David Frankel, Jarad Niemi, Dan Nordman and T.J. Rakitan for helpful comments and suggestions. All errors are mine. Contact: 173 Heady Hall, Department of Economics, Iowa State University, Ames, Iowa, 50011. Telephone: (515) 294-2469. Email: \href{mailto:anwen@iastate.edu}{anwen@iastate.edu}} \\ Iowa State University\\Ames, Iowa}
+\date{\today}
+
+\maketitle
+
+\begin{abstract}
+  \noindent This paper examines the problem of how to forecast out-of-sample when there is a structural break in the candidate forecasting model, but the evidence supporting the break is not strong. In other words, there is uncertainty about which model to choose, the stable model or the structural break one.  The framework explored in this paper also works in the case of a pseudo-true break model where the underlying data generating process follows a continuous structural break process. We propose using model averaging weights which minimize the cross-validation criterion. Our empirical example of forecasting excess stock returns demonstrates that the cross-validation model averaging performs significantly better than other popular forecast combination methods, such as equal-weight combination, Bayesian model averaging and Granger--Ramanathan forecast combination.   \\
+
+  \noindent Keywords: \emph{Cross-Validation, Structural Break, Out-of-Sample, Forecast Evaluation, Forecast Combination}\\
+
+  \noindent \textsc{JEL} Classification: C22, C58
+\end{abstract}
+\newpage
+\doublespacing
+\section{Introduction}
+Forecast combination or model averaging has been a useful tool employed by econometricians and industry forecasters in studying many macroeconomic and financial time series, for example. GDP growth rate, monthly unemployment rate, inflation rate and stock market returns. Methods such as Granger--Ramanathan combination, Bates--Granger combination, Bayesian model averaging, least squares combination, time--varying combination and survey forecasts combination have been developed to forecast under various settings. There are several reasons explaining the popularity of forecast combination or model averaging in empirical research. First, it is highly possible that one single forecasting model a forecaster employs is misspecified due to information constraints, for example, predictors which potentially may help boost forecasting performance are not included in the underlying model, so combining forecasts or averaging models may help the forecaster better manage the risk induced in the forecasting process and take advantage of all the information available. Even in a stationary world, the true data generating process may be a highly complicated nonlinear function of its lags of infinite order and other variables. Most linear forecasting models proposed by researchers are only viewed as local approximations, so it is hard to believe that one model strictly dominates all others at all points in time. Rather, the best forecasting model may change over time. Due to small sample size and imperfect information, it is difficult to track the best model based on past forecasting performance. Averaging models can be taken as a way to make the forecasts more robust against misspecification biases. Second, a forecasting model's adaptability to parameter instability or structural breaks may not be constant across time. For example, due to drastic government policy change or financial institution reform, we may have structural breaks in the time series variable of interest. Depending on the magnitude and the frequency of the break process, forecasters may prefer a non-stationary model in which all or some of the parameters are changed around the detected break dates to a stable model where all parameters are assumed constant. Problem arises when the magnitude of the break is small or the evidence of parameter instability is not convincing. In this case, the pre-test model---the single forecasting model selected based on hypothesis testing or information criterion, may not be the best choice to generate forecasts in the sense of further reducing mean squared forecast error (\textbf{MSFE}). Facing this model selection uncertainty, forecast combination may offer diversification gains that make it attractive to average the break and stationary models rather than replying on a pre-test model. This is the primary motivation for the writing of this paper. See Timmermann \cite{timmermann2006forecast} for a comprehensive survey of forecast combination.
+
+A puzzle associated with forecast combination is that in many empirical applications, equally weighted forecasts scheme performs better than various optimal combination weights proposed by researchers, notably the Granger--Ramanathan combination. An important paper attempting to explain this puzzle is Elliott \cite{elliott11}. Elliott argues that if the variance of the unforecastable component of the variable is large, the gains from optimal forecast combination will be strictly dominated by the unpredictable component. Additionally, the noise introduced by estimating combination weights, especially when the number of weight is large, further reduces combination gains.
+
+In an empirical study on American equity market returns, Rapach, Strauss and Guo \cite{rsz2010} argue that forecast combination is a powerful tool against structural breaks in forecasting excess stock returns. Unfortunately, they did not provide any relevant econometric theory to support their claim and the use of their combination method. Besides, structural break can take various forms, such as discrete or continuous break in regression coefficients, or break in the unconditional variance. So under which type of parameter instability should researchers combine forecasts or models is not answered in Rapach, Strauss and Guo either.
+
+A drawback of forecast combination is that in many empirical applications, researchers or industry practitioners tend to ignore the econometric models associate with those forecasts. In return, this may result in omitting potentially important information related to combination weights. In this paper, we focus on the situation where forecasts are generating by two competing models, where the two models share the same regressors but one has structural breaks in the regression coefficients while the other is stable. This framework applies to cases such as, researchers or forecasters cannot find convincing evidence supporting structural breaks, breaks are of small magnitude or model is not correctly specified. Our paper adapts Hansen's Mallows model averaging method \cite{hansen2009averaging} to the study of out--of--sample forecasting with breaks. Specifically, we propose model averaging weights derived from cross--validation criterion combining the break model and the stable model. Cross--validation (\textbf{CV}) criterion is an unbiased estimate of the mean--squared forecast error (MSFE), so intuitively it justifies the use of CV weights to forecast out-of-sample. Under the assumption of conditional homoskedasticity, we show that the cross--validation model averaging weights are approximately identical to Hansen's Mallows' weights. A natural extension is to relax the assumption of conditional homoskedasticity since it may not be relevant to many empirical applications. Studies have shown that cross--validation criterion performs better than various rival criteria in terms of model selection under conditional heteoskedasticity, especially in the order selection of ARMA model. Our major contribution is deriving the cross--validation model averaging weights under conditional heteoskedasticity and evaluate their performance in simulation and in an empirical application.
+
+In an exploratory empirical study, we show that CV model averaging performs significantly better than other popular weighing schemes, such as Bayesian model averaging and Granger--Ramanathan forecast combination, in predicting US excess stock returns out--of--sample. Also we show that our CV model averaging solves the forecast combination puzzle in the same study.
+
+\section{Related Literature}
+
+This paper closely follows the literature related to information criterion based model selection and averaging, structural breaks testing, heteroscedasticity and autocorrelation consistent/robust (\textbf{HAC/HAR}) covariance matrix estimation and out-of-sample forecast of U.S. excess stock returns.
+
+Hansen has published a series of papers \cite{hansen_EMETRICA2007} \cite{hansen_JE2008} \cite{hansen2009averaging} \cite{hansen2011jackknife} which help develop relevant econometric theory for the use of model averaging under various situations. He has established that under the assumption of conditional homoskedasticity and the restriction of weight discretization, model average estimators based on Mallows' criterion are asymptotically optimal in the sense of minimizing squared errors while controlling omitted variable bias. The reason for using Mallows' criterion is because it is an asymptotically unbiased estimator of the in-sample MSE or one-step ahead out-of-sample MSFE compared with other criteria, such as Akaike information criterion (\textbf{AIC}) or Bayesian information criterion (\textbf{BIC}). Hansen later extends his Mallows' model averaging theory to forecast combination and compares its performance with other related combination methods based on simulated data \cite{hansen_JE2008}. He has shown that Mallows' criterion is an approximately unbiased estimator of MSFE even for a stationary time series but the optimality results only apply to the data generating process which satisfies independence and identical distribution. Besides, Hansen has imposed the restriction that the models under consideration are strictly nested in order to ensure optimality. In another paper coauthored with Racine \cite{hansen2011jackknife}, Hansen relaxes the assumption of conditional homoskedasticity and nested linear models to show model averaging optimality by replacing the Mallows' criterion with the cross-validation criterion (\textbf{CV}), but the optimality is still restricted to random sample and does not allow the arrival of new models for forecasters to consider. Comparing Mallows' criterion with CV, Andrews \cite{andrews_JE1991} has shown that Mallows' criterion is no longer optimal in model selection if allowing for conditional heteroscedasticity and CV is the only feasible criterion among popular candidates which is asymptotically optimal under general conditions. Liu and Okui \cite{liu_okui2012} propose a heteroscedasticity-robust Mallows' criterion which generalizes Hansen's least squares model averaging optimality results by allowing for heteroscedastic errors. One major drawback of the model averaging methods discussed above is that none of the optimality results applies to the setting where structural breaks are possible or nonlinear models are present.
+
+Model averaging under parameter instability heavily relies on the theory of break detection, break dates estimation and inference which are developed by several prominent econometricians. Historically, applied econometricians reply on Chow test to deal with structural break, but the use of Chow test assumes that the researcher knows the exact date of structural break if it indeed happens. This seems quite unrealistic and requires econometricians visually examine the time series data to search for a possible break point which may not be reliable at all. In a seminal paper, Andrews \cite{andrews93} has shown the non-standard asymptotic distribution of a class of Sup-type test statistic for detecting breaks and conducting inference when the break point is unknown. This results in a subsequent series of articles published related to break detection and optimal testing, notably Andrews \cite{andrews_ploberger94} \cite{andrews2003}, Hansen \cite{hansen_JE2000}, Bai \cite{bai_ET1997} \cite{bai_JE1999}, Bai and Perron \cite{bai_perron98}, Elliott and Muller \cite{elliott_muller_RES2006}, Rossi \cite{rossi_ET2005} and Bunzel and Iglesias \cite{bunzel_iglesias}. Bai and Perron \cite{bai_perron98} generalize Andrews' test by allowing for detecting and dating multiple change points in a partial structural break linear model and develop relevant asymptotic theory for conducting inference. Bai and Perron's computational procedure for detecting breaks is adopted in many empirical work related to macroeconomic and financial time series since it is reasonable to think that structural break may have happened more than once in the past, for example, the excess returns of the U.S. equity market because it has experienced drastic institutional change and several financial crises since the early twentieth century.
+
+As an alternative to the forecasting model averaging method studied in this paper when parameter instability is possible, several researchers have proposed various in--sample and out--of--sample tests to select a forecasting model which is robust to structural breaks. See Giacomini and Rossi \cite{giacomini_rossi_2008} \cite{giacomini_rossi_2010}, Bunzel and Calhoun \cite{bunzel_calhoun_2012} and Inoue and Kilian \cite{inoue_kilian_ER2004}.
+
+Since allowing for heteroscedasticity requires the use of HAC or HAR estimators of the covariance matrix in empirical applications, various methods regarding the choice of kernel and bandwidth for estimating covariance matrix can be considered. See Newey and West \cite{newey_west_EMETRICA1987}, Andrews \cite{andrews91}, Kiefer, Vogolsang and Bunzel \cite{kvb2000} and Sun \cite{sunyixiao_2010}.
+
+\section{Econometric Theory}
+\subsection{Model and Estimation}
+The econometric model to forecast is closely related to Hansen \cite{hansen2009averaging} and Andrews \cite{andrews93}. The model we are interested in is a linear time series regression with a possible structural break. The observations we have are $\{y_t,x_t\}$ for $t = 1,...T$, where $y_t$\footnote{Since we are interested in forecasting, $y_t$ can be thought of as the variable to be predicted for the next period, using currently available information $x_t$.} is the scalar dependent variable and $x_t$ is a $k\times 1$ vector which may contain lagged values of $y_t$ and other related predictors. Parameters are estimated by least squares. The model\footnote{In this paper we assume that all information relevant to help forecast is included in the regressors $x_t$, the source of model misspecification comes from the uncertainty about the parameter change. This is in contrast to most applied standardized models introduced in textbooks where model misspecification bias comes from the wrong choice of regressors, but the parameters are assumed constant.} is:
+\begin{equation}
+	y_t = x_t'\beta_1 I_{[t<m]} + x_t'\beta_2 I_{[t \geq m]} + e_t
+\end{equation}
+where $I_{[\bullet]}$ is an indicator function and $E(e_t|x_t) = 0$. We are going to show two major results in the subsequent analysis, depending on whether or not we allow for conditional heteroscedasticity in the error term. The break date is restricted to the interval $[m_1,m_2]$ which is bounded away from the ends of the sample on both sides, $1 < m_{1} < m_{2} < T$.
+
+If structural break is not detected\footnote{This can be done in two ways: we can treat various possible number of breaks as different models, then select one among these candidates by some information criterion, for example, AIC, SIC or Mallow's; the other way is by hypothesis testing, following the relevant testing procedures outlined in Andrews\cite{andrews93}, Bai and Perron\cite{bai_perron98} and Elliot and Muller\cite{elliott_muller_RES2006}. }, we simply have a stable linear model:
+\begin{equation}
+	y_t = x_t'\beta + e_t
+\end{equation}
+Commonly used procedure is that we can perform a test for structural breaks, either by using Andrews' SupF or SupW test or Bai and Perron's multiple break test. Based on the comparison between the test statistic and the corresponding critical value from related table, we then decide which model to keep, the stable model or the break one. This is the pre-test procedure outlined in Hansen \cite{hansen2009averaging}. Under the assumption of conditional homoskedasticity, the test statistic is of SupF type. If we relax this assumption, the appropriate test statistic should be of Sup-Wald type, since F test does not allow for heteroscedasticity in the errors. We use $\pi = m/T$ to denote the break fraction, where $m$ is the time index of the break date in the sample. Under the assumptions listed in Andrews \cite{andrews93} and under the null of no break, the SupF or SupW test statistic converges in distribution to the supremum of the square of a standardized tied-down Bessel process of order $k$, where $k \geq 1$ is the number of regressors in the model.\footnote{This distribution is non-standard so its critical values are obtained through simulation. Readers, especially empirical researchers, should be aware of the fact that those critical values given in Andrews' 1993 paper are not correct and should not be based upon to conduct inference. Instead, use values provided in Andrews' 2003 paper,\emph{Tests for Parameter Instability and Structural Change with Unknown Change Point: A Corrigendum}. Hansen \cite{hansen2009averaging} has done the same simulation in order to calculate his $\bar{p}$ value for model averaging weights. The author has replicated Andrews' critical value simulation during the writing of this paper and has obtained the same numerical results as Hansen but still different from Andrews' 2003 values. The difference may be caused by using different number of repetition in the simulation.}.
+
+There are several popular information criteria for model selection, for example, Akaike information criterion (\textbf{AIC}), corrected AIC (\textbf{AIC\textsuperscript{c}}), Schwarz Bayesian information criterion (\textbf{SIC}), Hannan-Quinn (\textbf{HQ}) and Mallows criterion (\textbf{C\textsubscript{p}}). They are listed in table \ref{tb:1}.
+\begin{table}
+\centering
+\caption{Information Criterion} \label{tb:1}
+\begin{threeparttable}
+\begin{tabular}{ll}
+\toprule
+AIC                 & $\mathrm{AIC}(k) = \log{(\tilde{\sigma}^{2}_{k})} + \frac{2k}{T}$ \\[0.4em]
+$\mathrm{AIC}^{c}$  & $\mathrm{AIC}^{c}(k) = \mathrm{AIC}(k) + \frac{2k(k+1)}{T-k-1}$ \\[0.4em]
+SIC                 & $\mathrm{SIC}(k) = \log{(\tilde{\sigma}^{2}_{k})} + \frac{k\log{(T)}}{T}$ \\[0.4em]
+HQ                  & $\mathrm{HQ}(k) = \log{(\tilde{\sigma}^{2}_{k})} + \frac{2k\log{\log(T)}}{T}$ \\[0.4em]
+Mallows            & $\mathrm{C}_{p}(k) = \hat{\sigma}^{2}_{k} + \frac{2k\tilde{\sigma}^{2}_{k}}{T}$\\
+\bottomrule
+\end{tabular}
+\begin{tablenotes}[para, flushleft] \footnotesize
+Note: We use the number of regressors $k$ to index model. If there is a full structural break, the model index would be $2k$.
+\end{tablenotes}
+\end{threeparttable}
+\end{table}
+
+Cross-validation is computationally simple for one-step ahead forecast models selection and robust to heteroscedasticity. Researchers have derived cross-validation weights for stable models, which can be translated into a quadratic programming problem. Hansen and racine \cite{hansen2011jackknife} argue that for heteroscedastic forecasts, CV is a valid estimate of the one-step ahead MSFE for a combination forecast. They show that the CV weights are asymptotically optimal for cross-section data under heteroscedasticity.
+
+The leave-one-out cross-validation criterion can be computed by the following procedure:
+\begin{equation}
+	CV_T(k) = \frac{1}{T}\sum_{t=1}^{T}\tilde{e}_{t}(k)^{2}
+\end{equation}
+where $\tilde{e}_{t}(k) = y_t - \tilde{\beta}_{-t}(k)'x_t(k)$ and $\tilde{\beta}_{-t}(k) = (\sum_{i\not= t}x_i(k) x_i(k)')^{-1}(\sum_{i\not= t}x_i(k) y_i)$, that is, at each time $t$, the parameters are estimated by omitting current observation $t$ then compute its error. It may look tedious since we need to run $T$ times of regression, but in the next section we will show that this can be achieved efficiently with running regression only once. The cross-validation criterion is asymptotically an unbiased estimator of MSFE and is more robust to heteroscedasticity compared with Mallows' criterion. This is especially important when we are working with macroeconomic and financial time series data.
+
+Since we only have two candidate models in this study, namely the stable model and the break model, to implement model averaging, we assign weight $w \in [0,1]$ to the break model and $1 - w$ to the stable model. The weights are those minimizing the CV criterion.
+\subsection{Theoretical Results}
+We assume that the true data generating process of $y_t$ takes the general parameter variation form and the change is of small magnitude so that the asymptotic distributions are asymptotically continuous. Under this assumption we can tell that the empirical model outlined in the previous section could be potentially misspecified, since the one single break model is only a special case of the general parameter variation model, namely the absolute change of parameter values is positive in one period while zero in others. In almost all empirical works related to macroeconomics and finance, researchers are interested in finding the best approximating model among all candidates available instead of looking for and estimating the true data generating process\footnote{There is research focusing on fitting data with a complex model, for example, a nonlinear continuous break model. Though this approach may achieve good in-sample fit, its forecasting performance generally does not do well. As the simulation results of this paper shows, when the true data generating process has continuous variation in its parameters, the simple no-break linear model forecasts better in terms of smaller MSFE than most complex methods.}, so the possible benefits we can obtain by allowing for model misspecification are better MSFE under model averaging forecast than other methods in empirical applications.
+\begin{Assumption}\label{asump:1}
+Assume the following holds:
+\begin{enumerate}
+	\item The data generating process satisfies the linear model $y_t = x_t'\beta_t + e_t$, $t=1,...,T,\beta_t \in \mathbb{R}^k$, where $\beta_t = \beta + T^{-1/2}\eta(t/T)\delta\sigma_t$. $\eta(\bullet)$ is a $\mathbb{R}^k$ valued Riemann integrable function on $[0,1]$ and $\delta \in \mathbb{R}$ is a scalar indexing the magnitude of parameter variation.
+	\item $\{(x_t',e_t)\}$ is $\alpha$-mixing of size $-r/(r-2),r > 2$ or $\phi$-mixing of size $-r/(2r-2),r \geq 2$.
+	\item $E(x_t e_t) = 0, \forall t$, and the empirical process $\{x_t e_t\}$ is uniformly $L_r$-bounded, i.e., $||x_t e_t||_{r} < B$, where $B < \infty$.
+	\item $T^{-1}\sum_{t=1}^{[\pi T]}x_t x_t'$ converges uniformly to $\pi Q$ for all $\pi \in [0,1]$, $Q = E(x_t x_t')$ and all eigenvalues of $Q$ are uniformly bounded away from zero. $[\pi T]$ denotes the integer part of the product $\pi T$.
+	\item $E(e_t^{2}|x_t) = \sigma_t^{2}$ or $E(e_t^{2}|x_t) = \sigma^{2}$.
+\end{enumerate}
+\end{Assumption}
+Assumption 1.1 says that the true data generating process of $y_t$ takes a general parameter variation form and structural break happens to all parameters. This assumption follows the theory proposed by Andrews and Hansen but is different from Bai and Perron who consider partial structural breaks. This data generating process includes several cases which have been studied by researchers, such as a single break or continuous break. Notice that our forecast model only allow for one possible break in the parameters, so it could potentially be misspecified. We make this assumption and allow for the gap between DGP and model primarily for two reasons: first, as argued by several prominent researchers, for example, L\"{u}tkepohl \cite{lutkepohl_textbook}, that the true data generating process of many macroeconomic and financial variables may be a complicated process possibly involving past values of infinite order. The main focus is not to search for the true DGP but to find the best approximating model based on available information to forecast. This assumption tries to capture the difficulty faced by many practitioners in forecasting; second, a simple model is more likely to forecast better than many complex methods. As shown in one case of the simulation section, even though the true DGP is a continuous break process, the stable model forecasts better than most weighting methods.
+
+Assumption 1.2--1.4 ensures that all relevant mixing law of large numbers, central limit theorem and Donsker's invariance principle hold. Assumption 1.5 says that the error term could be conditionally homoskedastic or heteroscedastic, depending the application we are interested in.
+
+We start by providing a lemma showing that the CV residuals can be efficiently computed by using the leverage of each observation without actually having to run least squares regression $T$ times.
+\begin{lemma} \label{lem:1}
+Leave--one--out cross--validation estimation residuals can be computed from full sample least squares residuals, $\tilde{e_t} = \frac{\hat{e_t}}{1-h_t}$, where $h_t = x_t' (X'X)^{-1} x_t$ is the leverage.
+\end{lemma}
+
+The main theoretical results in this paper are to derive the asymptotic distribution of the penalty term in the CV criterion since its first moment is crucial in determining the optimal weights in model averaging. We discuss two possible cases depending on whether the assumption of conditional homoskedasticity holds or not. The proofs of all theoretical results are provided in the appendix.
+\begin{theorem} \label{thm:1}
+If assumption~\ref{asump:1} holds under conditional homoskedastic errors, the leave-one-out cross--validation criterion is approximately equivalent to Mallows' criterion. Specifically, the weight for the break model is
+\begin{equation}
+\hat{w} = \frac{(T - 2k)(\sum_{t=1}^{T}\tilde{e}_{t}^{2} - \sum_{t=1}^{T}\hat{e}_{t}^{2}) - \bar{p}\sum_{t=1}^{T}\hat{e}_{t}^{2}}{(T - 2k)(\sum_{t=1}^{T}\tilde{e}_{t}^{2} - \sum_{t=1}^{T}\hat{e}_{t}^{2})}
+\end{equation}
+where $T$ is the sample size, $k$ is the number of regressors, $\hat{e}_t$s are the OLS residuals from the break model, $\tilde{e}_t$s are residuals from the stable model, $\bar{p}$ is the penalty coefficient whose value depends on the asymptotic distribution of the SupW test statistic.
+\end{theorem}
+This theorem shows that if we assume conditional homoskedasticity in the model, then the CV criterion is approximately identical to the Mallows' criterion\footnote{This is quite intuitive, because the major advantage of CV over Mallows is that CV is robust to heteroscedasticity. If we assume away of conditional heteroscedasticity, then these two criteria are almost equivalent.}, so all the model averaging results in Hansen \cite{hansen2009averaging}, i.e., optimal weights, hold under cross--validation.
+
+It is widely known in the model selection literature that the CV criterion is superior to Mallows' and other information criteria because of its robustness to heteroscedasticity \cite{andrews_JE1991}. Our next theorem shows the asymptotic distribution of the CV penalty term if we relax the assumption of conditional homoskedasticity.
+\begin{theorem} \label{thm:2}
+If assumption~\ref{asump:1} holds under conditional heteroscedastic errors, the penalty term in CV criterion converges in distribution to a weighted sum of independent $\chi^2$ distribution with degree of freedom one plus a distribution which is a function of non-standard Brownian bridge,
+\begin{equation}
+	e'P(\hat{k})e \stackrel{d}{\rightarrow} \sum_{j=1}^{k} \lambda_j \chi^2(1) + J_0(\xi_{\delta})
+\end{equation}
+where $\lambda_j$s are the eigenvalues of the matrix $L'Q^{-1}L$, $L$ comes from the decomposition of the positive definite matrix $\Sigma = LL'$, $\Sigma$ is the long-run variance of $\rn\jian X_t e_t$, $Q = E(x_t x_t')$ and $J_0(\xi_{\delta})$ is the asymptotic distribution of the Sup-Wald type statistic as in Andrews \cite{andrews93} under the true data generating process.
+\end{theorem}
+Now the asymptotic distribution of the penalty term involves a weighted sum of $\chi^2$ distributions and a Sup-Wald type distribution under the true data generating process. Compare this result with the previous one, we can see that the distribution under conditional homoskedasticity is just a special case of the new distribution, that is, the weights for those $\chi^2$ random variables are identical and take the value of one, so it results in a $\chi^2$ distribution with the degree of freedom equal to the number of regressors. For the second part, since Andrews \cite{andrews93} proves the asymptotic distribution for the Sup-Wald type statistic under quite general conditions, his results still hold here under heteroscedastic errors.
+
+Notice that the new asymptotic distribution for the penalty term is non-standard, but its mean is relatively easy to compute which is the only moment we care about in computing optimal model weights. The expectation of $\sum_{j=1}^{k} \lambda_j \chi^2(1)$ is simply $\sum_{j=1}^{k} \lambda_j$ which is the trace or sum of eigenvalues of the matrix $Q^{-1} \Sigma$, where $\Sigma$ is the long-run variance of $\rn\jian X_t e_t$ and $Q = E(x_t x_t')$. Empirically, $\Sigma$ can be estimated by HAC or HAR estimators and $Q$ can be consistently estimated by its sample analogue $\frac{1}{T}\sum_{t=1}^{T}x_t x_t'$.
+
+\begin{lemma} \label{lem:2}
+Suppose that $\hat{e}_t$s are the OLS residuals from the break model and $\tilde{e}_t$s are residuals from the stable model, then the optimal weight for the break model with conditional heteroscedasticity takes the form \footnote{$\mathrm{E(SupW(\pi_1,k))}$ is the expectation of the SupW distribution under the null of no break in Andrews' paper, evaluated at given values of $\pi$ and $k$. Note that the expectation of the SupW distribution under the true date generating process depends on unknown, so Hansen suggests that in practice we can approximate its value by taking the averaging of two extreme cases: $\delta = 0$ and $\delta = \infty$. $\delta = 0$ implies that the distribution is identical to the SupW distribution under the null of no break while $\delta = \infty$ indicates that when the break size goes to infinity, essentially it is like we know exactly when and where the break happens, so its distribution becomes the $\chi^2$ type distribution whose first moment can be easily obtained without simulation.}:
+\begin{equation}
+	\hat{w} = 1 - \frac{\frac{1}{2}(\sum_{j=1}^{k}\lambda_j + \mathrm{E(SupW(\pi_1,k))})}{\sum_{t=1}^{T}\hat{e}_t^2 - \sum_{t=1}^{T}\tilde{e}_t^2}
+\end{equation}
+where the expectation of the SupW distribution depends on the number of regressors $k$ and the value of the trimming parameter $\pi_1$\footnote{In practice, a popular choice of $\pi_1$ is $0.15$.}.
+\end{lemma}
+\section{Simulation Results}
+Here we are going to evaluate the forecast performance of CV model averaging through controlled numerical simulation. Specifically, we are going to consider three cases regarding the true data generating process: the DGP has a one-time full break in its coefficients; the DGP follows a stable linear relationship; the DGP follows a continuous full break process in its parameters. For each case, we examine the out-of-sample forecasting performance by whether or not conditional heteroscedasticity is present. We consider two commonly used OOS forecasting windows, namely, recursive window and rolling window. In total, we have $3 \times 2 \times 2 = 12$ cases.
+
+In each case, we vary the number of regressors and the size of the break if it exists in the DGP. Specifically, we consider there is $1,3$ and $5$ regressors and the relative break size is $1.1, 1.5$ and $2$, for example, $\beta_{t+1} = 1.5 \times \beta_{t}$. Conditional heteroscedasticity is generated by setting the variance of each error term equal to the Euclidean norm of the contemporaneous regressors.
+
+Out-of-sample forecast is conducted by the following steps: we split the sample into two parts, the first segment called the prediction sample while the second called the evaluation sample. We impose that the structural break happens in the prediction sample if it exists in the DGP. Under recursive window, each time the estimated parameter is updated by adding one more observation, for example, $\beta_{t} = (\sum_{s=1}^{t-1} x_{s} x_{s}')^{-1}\sum_{s=1}^{t-1}x_{s}y_{s+1},\beta_{t+1} = (\sum_{s=1}^{t} x_{s} x_{s}')^{-1}\sum_{s=1}^{t}x_{s}y_{s+1}$. Under rolling window, each time the parameters are updated by adding new observations but the sample size is fixed at R, for example, $\beta_{t} = (\sum_{s=1}^{R} x_{s} x_{s}')^{-1}\sum_{s=1}^{R}x_{s}y_{s+1},\beta_{t+1} = (\sum_{s=2}^{R+1} x_{s} x_{s}')^{-1}\sum_{s=2}^{R+1}x_{s}y_{s+1}$.
+
+The total sample size, $T$, is $401$\footnote{This sample size is chosen to be relevant to most macroeconomic time series.}. In our pseudo one-step ahead out-of-sample forecasting simulation, we reserve the first $301$ observations as the training sample while the rest as prediction sample, so $R=301$ and $P=100$. For the one-break data generating process, the break date is set to happen at the $[0.2R]$th observation, where $0.2$ is the break fraction relative to the prediction sample. For the break model, we use the post-break window method to forecast out-of-sample. Other methods, such as the optimal window method proposed by Pesaran and Timmermann \cite{pesaran_timmermann_JE2007} or the robust weight method proposed by Pesaran, Pick and Pranovich \cite{pesaran_pick_pranovich_2011} could also be considered. For simplicity, we only use post-break window method in this paper \footnote{Currently researchers are sill working on developing theory and method related to forecast with breaks, so we are not aware of any dominant method which performs well in most situations faced by practitioners. The simulation conducted by Pesaran and Timmermann suggests that there is little gain for complicated methods. The simple rule, to forecast using the data after the detected break, seems to work as well as anything else.}.
+
+In each case, to evaluate and compare performance, we produce forecasts using six methods:
+\begin{inparaenum}[(i)]
+\item forecast based on CV model averaging without assuming conditional heteroscedasticity (\textbf{CV});
+\item forecast based on CV model averaging with conditional heteroscedasticity (\textbf{GCV});
+\item forecast based on the stable model (\textbf{Stable});
+\item forecast based on the break model (\textbf{Break});
+\item forecast based on Bayesian model averaging\footnote{We call this method "Bayesian" not in a strict sense: the Bayesian weight for each model is calculated based on the value of the Schwarz-Bayesian information criterion, i.e., the weight for the beak model is $w_{b} = \exp{(SIC^{b})}/(\exp{(SIC^{b})} + \exp{(SIC^{s})})$} (\textbf{Bayesian}); and
+\item forecast based on equal weights\footnote{Each model receives weight of $0.5$.} (\textbf{Equal}).
+\end{inparaenum}
+We compare their forecast performance by root mean-square forecast error (\textbf{RMSFE}). For the ease of comparison, we pick the equal weight method as the benchmark\footnote{The reason to pick equal weight as benchmark is because of forecast combination puzzle: equally weighted forecasts tend to perform better than other complicated methods in many applications. But this puzzle is generally discussed in the forecasting literature without allowing for breaks. In this study we try to examine whether it dominates our method when facing structural breaks.} and compute the relative performance (\textbf{Ratio}) for each method, for example, RMSFE\textsuperscript{GCV}/RMSFE\textsuperscript{Equal Weight}. If the ratio is less than one, it performs better than equal weights.
+\subsection{Single Break}
+The single true structural break in the parameters happens at fraction $\tau$ of the training sample, and we use $\delta$ to denote the break magnitude, so the coefficients become $\beta \delta$ after the break date. We set $\tau = 0.15, 0.2, 0.3$ and $\delta = 1.1, 1.5, 2$, so there are nine cases for each forecasting window. For comparison purpose, we also provide results from other candidate models, namely, stable model, break mode, equal-weight averaging model and Bayesian averaging model. Forecasting performance is measured in terms of mean-squared forecast error (\textbf{MSFE}). Simulation results are shown in table 1.
+
+Since there is a single break which happened in the training sample, the break model is the true model in this case, not surprisingly that it has the best performance in the sense of lowest MSFE among almost all scenarios as shown in table 1. Bayesian model averaging performs the worst in almost all cases, especially when the break magnitude is large. CV model averaging performs better than equal-weight model in all cases under fixed and recursive windows, it does better most of the time under rolling window, so the equally weighted forecast combination is not the optimal choice in this exercise. Notice that under either recursive or rolling window, the performance of CV model averaging declines when the break happens close to the boundary of the sample and the break magnitude becomes large.
+\subsection{No Break}
+
+\subsection{Continuous Break}
+Now we set the true model following a continuous random-break process, specifically, $\beta_{t} = \beta (1+z_{t}) \delta$, where $z_{t}$ is independently and randomly drawn from a $N(0,1)$ distribution, and $\delta$ denotes the magnitude of break. Model misspecification makes this situation more interesting since in most empirical works researchers do not know the true data generating process, the majority of proposed econometric models and methods only serve to approximate the true DGP. Here we only consider the stable model, one-break model and model averaging as possible candidates. Pseudo out-of-sample forecast are conducted under all three windows and results are shown in table 2.
+
+From table 2, we can see that CV model averaging performs better than either stable or break model under fixed window, but no clear pattern can be seen under other windows. Its performance declines when the break magnitude becomes large under all windows. Equal-weight model does better than CV model averaging under rolling window, but not so under the other two windows. Again, Bayesian model averaging based on Bayesian information criterion performs the worst.
+\section{Empirical Application}
+\subsection{Out-of-sample Forecast under Conditional Homoskedasticity}
+Here we apply our theoretical results to forecasting excess US stock returns based on Goyal and Welch's \cite{goyal_welch_RFS2008} monthly dataset \footnote{Data can be obtained at \url{http://www.hec.unil.ch/agoyal/}.}. Yin \cite{yin2012} shows that there is detected structural breaks in the simple univariate forecasting model with stock market variance but the evidence supporting breaks is not strong: the BIC is almost the same between the break model and the stable model, so there is no clear cut on which one we should choose to forecast. Model selection may not be a good option in this case, so we use the model averaging method studied in this paper to forecast out-of-sample and compare its results with other popular forecast combination methods.
+
+Our monthly data runs from September 1974 to December 2012. We reserve the last 36 observations as the evaluation sample while the rest as training sample. The estimation is based on fixed window, though including more window schemes, namely, recursive window and rolling window, is desirable. To calculate optimal CV weights, for the penalty term, we choose the value corresponding to the one with two regressors and with trimming parameter of 0.15 in Hansen \cite{hansen2009averaging} \footnote{MATLAB code to compute the penalty coefficient at different combinations of number of regressors and trimming parameters can be obtained from the author upon request.}.We compute the out--of--sample MSFE for CV averaging, post-break window, equal weights, Bayesian averaging and GR combination and the results are shown in table 1.
+
+From table 1, we can see that the CV model averaging performs significantly better than equal weights, Bayesian model averaging and Granger--Ramanathan (\textbf{GR}) combination in this empirical study. Granger--Ramanathan combination performs the worst among all five methods confirming the prevailing forecast combination puzzle which says that equal weights scheme dominates the GR combination. One fact worth pointing out is that the post-break window forecast performs equally well as CV averaging in this case.
+
+\section{Conclusion}
+The writing of this paper is motivated by the question of how to forecast a time series variable of interest when it is unclear which model to choose, the break one or the stable one since the evidence supporting the break model is not strong. Built upon Hansen's Mallows' model averaging results, we propose using the model averaging weights which minimize the cross-validation criterion since it shown to be more robust to heteroscedasticity than other information criteria. Our empirical example of forecasting excess stock returns shows that the cross-validation model averaging performs significantly better than other popular forecast combination methods, such as equal-weight combination, Bayesian model averaging and Granger--Ramanathan forecast combination.
+\appendix
+\section{Proof of Theoretical Results}
+\begin{proof}[Proof of Lemma~\ref{lem:1}]
+\begin{eqnarray}
+ \hat{\beta}_{-t}
+& = & (\sum_{i \neq t} x_i x_i')^{-1} (\sum_{i \neq t} x_i y_i) \nonumber \\
+& = & (X'X - x_t x_t')^{-1} (X'Y - x_t y_t) \nonumber \\
+& = & [(X'X)^{-1} + (1 - h_t)^{-1} (X'X)^{-1} x_t x_t' (X'X)^{-1}] (X'Y - x_t y_t)  \nonumber \\
+& = & (X'X)^{-1}X'Y - (X'X)^{-1} x_t y_t + (1 - h_t)^{-1} (X'X)^{-1} x_t x_t' (X'X)^{-1} (X'Y - x_t y_t)  \nonumber \\
+& = & \hat{\beta} - (X'X)^{-1} x_t y_t + (1 - h_t)^{-1} (X'X)^{-1} x_t (x_t' \hat{\beta} - x_t y_t) \nonumber \\
+& = & \hat{\beta} - (1 - h_t)^{-1} (X'X)^{-1} x_t [(1 - h_t) y_t - x_t' \hat{\beta} + h_t y_t] \nonumber \\
+& = & \hat{\beta} - (1 - h_t)^{-1} (X'X)^{-1} x_t \hat{e}_t  \nonumber \\
+\end{eqnarray}
+\begin{eqnarray}
+ \tilde{e}_t
+& = & y_t -x_t' \hat{\beta}_{-t} \nonumber \\
+& = & y_t - x_t' [\hat{\beta} - (1 - h_t)^{-1} (X'X)^{-1} x_t \hat{e}_t ] \nonumber \\
+& = & \hat{e}_t  + (1 - h_t)^{-1} h_t \hat{e}_t  \nonumber \\
+& = & \frac{\hat{e}_t }{1 - h_t}
+\end{eqnarray}
+\end{proof}
+
+\begin{proof}[Proof of Theorem~\ref{thm:1}]
+\begin{eqnarray}
+\frac{1}{T} \sum_{i=1}^T \tilde{e_t}^2 & = & \frac{1}{T} \sum_{i=1}^T \frac{\tilde{e_t}^2}{(1-h_t)^2} \nonumber \\
+                                        & \approx & \frac{1}{T} \sum_{i=1}^T \hat{e_t}^2 + \frac{2}{T} \sum_{i=1}^T \hat{e_t}^2 h_t \nonumber \\
+                                        & = & \hat{\sigma}^2 + \frac{2}{T} \sum_{i=1}^T \hat{e_t}^2 x_t' (X'X)^{-1} x_t \nonumber \\
+                                        & = & \hat{\sigma}^2 + \frac{2}{T} tr[(X'X)^{-1} \sum_{i=1}^T \hat{e_t}^2 x_t'x_t] \nonumber \\
+                                        & = & \hat{\sigma}^2 + 2 \bold{e}' \bold{P} \bold{e}
+\end{eqnarray}
+\end{proof}
+\begin{proof}[Proof of Theorem~\ref{thm:2}]
+We relax the conditional homoscedasticity assumption in Hansen's Mallow's model averaging method when there is a possible structural break in the underlying DGP. The proof is adapted from Hansen \cite{hansen2009averaging} and Andrews \cite{andrews93} without assuming conditional homoscedasticity. The CV penalty term can be expanded as:
+\begin{eqnarray*}
+e'P(k)e & = & e'Pe + e'P^{*}(k)e \\
+        & = & e'Pe + e'X^{*}(k)(X^{*}(k)'X^{*}(k))^{-1}X^{*}(k)'e
+\end{eqnarray*}
+where the notations for $P$,$P^{*}(k)$ and $X^{*}(k)$ are the same as in Hansen \cite{hansen2009averaging}.
+
+For the second term, $e'X^{*}(k)(X^{*}(k)'X^{*}(k))^{-1}X^{*}(k)'e$, we can see
+\begin{eqnarray*}
+X^{*}(k)'X^{*}(k) & = & (X(k)-X(X'X)^{-1}X(k)'X(k))'(X(k)-X(X'X)^{-1}X(k)'X(k)) \\
+                  & = & X(k)'X(k) - X(k)'X(X'X)^{-1}X(k)'X(k) \\
+				  &   & - X(k)'X(k)(X'X)^{-1}X'X(k) + X(k)'X(k)(X'X)^{-1}X(k)'X(k) \\
+				  & \stackrel{P}{\rightarrow} & \pi Q - \pi QQ^{-1} \pi Q - \pi QQ^{-1} \pi Q + \pi QQ^{-1} \pi Q \\
+				  & = & \pi (1-\pi)Q
+\end{eqnarray*}
+
+So by continuous mapping theorem we have $(X^{*}(k)'X^{*}(k))^{-1}\stackrel{P}{\rightarrow}(\pi (1-\pi))^{-1}Q^{-1}$.
+
+\begin{eqnarray*}
+(X(k) - X(X'X)^{-1}X(k)'X(k))'e & = & X(k)'e - X(k)'X(k)(X'X)^{-1}X'e \\
+                                & = & \jia X_i e_i - \jia X_i X_i'(\jian X_i X_i')^{-1}(\jian X_i e_i)
+\end{eqnarray*}
+
+We have:
+
+\begin{eqnarray*}
+\rn \jia X_i e_i - (\frac{1}{n} \jia X_i X_i')(\frac{1}{n} \jian X_i X_i')^{-1}(\rn \jian X_i e_i) & \stackrel{d}{\rightarrow} & W(\pi) - \pi Q Q^{-1}W(1) \\
+                                                                                                   & =                         & W(\pi) - \pi W(1)
+\end{eqnarray*}
+
+\noindent $W(1)$ is a vector of Brownian motion with covariance matrix $\lim_{n\to\infty}$VAR$(\rn\jian X_i e_i)\equiv\Sigma$. Then we have
+
+\begin{eqnarray*}
+e'P^{*}(k)e & = & e'X^{*}(k)(X^{*}(k)'X^{*}(k))^{-1}X^{*}(k)'e \\
+            & \stackrel{P}{\rightarrow} & \frac{1}{\pi(1-\pi)} (W(\pi) - \pi W(1))'Q^{-1}(W(\pi) - \pi W(1)) =  \frac{1}{\pi(1-\pi)} \mathbf{B}(\pi)'\mathbf{B}(\pi)
+             \equiv J_0(\xi_{\delta})
+\end{eqnarray*}
+where $\mathbf{B}(\pi)$ is a Brownian bridge. Combined with Hansen's \cite{hansen2009averaging} theorem 1 without assuming conditional homoskedasticity or Andrews' \cite{andrews93} theorem 4,our results follow.
+
+For the first term, $e'Pe$, we can see
+
+\begin{eqnarray*}
+e'Pe & = & (\jian X_i e_i)'(\jian X_i X_i')^{-1}(\jian X_i e_i) \\
+     & \stackrel{d}{\rightarrow} & W(1) Q^{-1} W(1)
+\end{eqnarray*}
+
+Under the assumption of conditional homoskedasticity, the above distribution is a $\chi^2$ distribution times the variance of the population error. If we relax the assumption of conditional homoskedasticity, $e'Pe$ does not converge to a $\chi^2$ distribution, instead, it converges to a weighted sum of $\chi^2$ distribution of one degree of freedom.
+
+For a multivariate normal distribution, $N(0,\Sigma)$, since $\Sigma$ is symmetric and positive definite, we have $\Sigma = TT'$. We also know that $Q^{-1}$ is symmetric and is of the same rank of $\Sigma$,
+by application of lemma 8.2 of \emph{White} \cite{white_mle_textbook} and chapter 5 of \emph{Ravishanker and Dipak} \cite{linear_model_textbook}, we have
+
+\begin{eqnarray*}
+e'Pe & \stackrel{d}{\rightarrow} & \sum_{j=1}^{k} \lambda_j \chi^2(1)
+\end{eqnarray*}
+where $\lambda_j$s are eigenvalues of the matrix $L'Q^{-1}L$, $\Sigma = LL'$. Although the asymptotic distribution is not pivotal, since we are only interested in the mean of this distribution, we can easily obtain its mean by $\mathrm{E}(e'Pe) = \sum_{j=1}^{k} \lambda_j = \tr{(L'Q^{-1}L)} = \tr{(Q^{-1} \Sigma)}$, where $Q$ and $\Sigma$ can be estimated by their sample analogues. This can be done without relying on Monte Carlo simulation.
+\end{proof}
+\begin{proof}[Proof of Lemma~\ref{lem:2}]
+The proof of this lemma follows Hansen\cite{hansen2009averaging}, just replace relevant terms according to Theorem~\ref{thm:2}.
+\end{proof}
+\bibliographystyle{plain}
+\bibliography{mybib}
+\end{document} 

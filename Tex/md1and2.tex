@@ -1,0 +1,57 @@
+%\begin{sidewaystable}
+\begin{table}
+\caption{Model~\ref{md:1}} \label{tb:8}
+\centering
+\begin{adjustbox}{keepaspectratio}
+\begin{threeparttable}
+\begin{tabular}{lcccccccc}
+\toprule
+ & \multicolumn{4}{c}{Recursive Window} & \multicolumn{4}{c}{Rolling Window}\\%[0.3em]
+\cmidrule(r){2-5}
+\cmidrule(r){6-9}\\
+       & CV   & GCV  & Bayesian & Equal & CV   & GCV  & Bayesian & Equal \\
+P = 15 & 1.040& 0.965& 0.999    & 1.000 & 1.038& 2.655& 0.999    & 1.000\\
+P = 20 & 1.044& 0.967& 0.999& 1.000& 1.004& 0.969& 1.000& 1.000\\
+P = 25 & 1.038& 0.968& 0.999& 1.000& 0.979& 0.946& 1.001& 1.000\\
+P = 30 & 1.022& 0.977& 0.999& 1.000& 1.002& 0.991& 1.000& 1.000\\
+P = 35 & 1.020& 0.980& 1.000& 1.000& 0.990& 0.982& 1.000& 1.000\\
+P = 40 & 1.022& 0.979& 0.999& 1.000& 0.987& 0.972& 1.000& 1.000\\
+P = 45 & 1.024& 0.978& 1.000& 1.000& 0.989& 0.977& 1.001& 1.000\\
+P = 50 & 1.021& 0.987& 1.000& 1.000& 1.003& 1.035& 1.000& 1.000\\
+\bottomrule
+\end{tabular}
+\begin{tablenotes}[para, flushleft] \footnotesize
+Notes: $\mathrm{P}$ is the size of the prediction sample. Equal weight is chosen as the benchmark and the numbers in the table represent the RMSFE ratio between individual method and equal weight.
+\end{tablenotes}
+\end{threeparttable}
+\end{adjustbox}
+%\end{sidewaystable}
+\end{table}
+
+\begin{table}
+\caption{Model~\ref{md:2}} \label{tb:9}
+\centering
+\begin{adjustbox}{keepaspectratio}
+\begin{threeparttable}
+\begin{tabular}{lcccccccc}
+\toprule
+ & \multicolumn{4}{c}{Recursive Window} & \multicolumn{4}{c}{Rolling Window}\\%[0.3em]
+\cmidrule(r){2-5}
+\cmidrule(r){6-9}\\
+       & CV & GCV & Bayesian & Equal & CV & GCV & Bayesian & Equal \\
+P = 15 &1.043 &0.995 &0.999 & 1.000& 1.038& 0.979& 0.999& 1.000\\
+P = 20 &1.031 &0.983 &0.999 & 1.000& 1.009& 1.004& 0.999& 1.000\\
+P = 25 &1.021 &0.984 &0.999 & 1.000& 0.996& 0.981& 1.000& 1.000\\
+P = 30 &1.022 &0.983 &0.999 & 1.000& 1.004& 1.003& 1.000& 1.000\\
+P = 35 &1.036 &0.996 &0.999 & 1.000& 1.018& 1.026& 1.000& 1.000\\
+P = 40 &1.012 &0.987 &1.000 & 1.000& 0.997& 0.989& 1.000& 1.000\\
+P = 45 &1.014 &0.986 &1.000 & 1.000& 1.005& 0.997& 1.000& 1.000\\
+P = 50 &1.011 &0.989 &1.000 & 1.000& 1.001& 1.004& 1.001& 1.000\\
+\bottomrule
+\end{tabular}
+\begin{tablenotes}[para, flushleft] \footnotesize
+Notes: $\mathrm{P}$ is the size of the prediction sample. Equal weight is chosen as the benchmark and the numbers in the table represent the RMSFE ratio between individual method and equal weight.
+\end{tablenotes}
+\end{threeparttable}
+\end{adjustbox}
+\end{table} 

@@ -1,0 +1,52 @@
+\newpage
+\begin{sidewaystable}
+\centering
+\caption{Single Break: Mean-Squared Forecast Error}
+\begin{adjustbox}{width=\textwidth,totalheight=\textheight,keepaspectratio}
+\begin{tabular}{cccccccccccccccc} \hline \hline
+\multicolumn{16}{c}{\textbf{Fixed Window}}\\ \hline
+ & \multicolumn{5}{c}{$\delta=1.1$} & \multicolumn{5}{c}{$\delta=1.5$} & \multicolumn{5}{c}{$\delta=2$} \\ \hline
+$\tau$ & \textbf{CV} & \textbf{Stable} & \textbf{Break} & \textbf{Equal} & \textbf{Bayesian} & \textbf{CV} & \textbf{Stable} & \textbf{Break} & \textbf{Equal} & \textbf{Bayesian} & \textbf{CV} & \textbf{Stable} & \textbf{Break} & \textbf{Equal} & \textbf{Bayesian}\\ \hline
+0.15 & 240.634 & 254.2 & 239.774 & 245.044 & 245.132 & 240.89 & 414.059 & 240.685 & 292.564 & 304.354 & 240.789 & 852.696 & 240.685 & 410.834 & 479.301 \\
+0.2	& 243.104 & 263.242 & 241.704 & 250.153 & 250.298 & 240.763 & 570.587 & 240.498 & 337.118 & 362.109 & 240.629 & 1444.05 & 240.498 & 569.516 & 714.335\\
+0.3 & 245.989 & 278.203 & 243.889 & 257.207 & 257.449 & 243.483 & 853.017 & 243.097 & 420.715 & 470.782 & 243.286 & 2527.974 & 243.097 & 865.258 & 1156.45\\ \hline \hline
+
+\multicolumn{16}{c}{\textbf{Recursive Window}}\\ \hline
+ & \multicolumn{5}{c}{$\delta=1.1$} & \multicolumn{5}{c}{$\delta=1.5$} & \multicolumn{5}{c}{$\delta=2$} \\ \hline
+$\tau$ & \textbf{CV} & \textbf{Stable} & \textbf{Break} & \textbf{Equal} & \textbf{Bayesian} & \textbf{CV} & \textbf{Stable} & \textbf{Break} & \textbf{Equal} & \textbf{Bayesian} & \textbf{CV} & \textbf{Stable} & \textbf{Break} & \textbf{Equal} & \textbf{Bayesian}\\ \hline
+0.15 & 246.711 & 248.592 & 246.77 & 246.96 & 308.778 & 221.302 & 287.398 & 221.408 & 234.318 & 2037.72 & 349.786 & 1427.091 & 349.584 & 648.446 & 20726.79\\
+0.2 & 315.177 & 350.884 & 314.59 & 325.05 & 945.002 & 181.22 & 539.014 & 181.484 & 252.327 & 8414.619 & 145.807 & 1650.04 & 145.796 & 522.477 & 30171.84\\
+0.3 & 270.549 & 309.137 & 267.528 & 286.178 & 194.44 & 278.823 & 1091.203 & 278.403 & 507.719 & 14660.06 & 185.503 & 2947.579 & 185.508 & 876.176 & 73889.91\\ \hline \hline
+
+\multicolumn{16}{c}{\textbf{Rolling Window}}\\ \hline
+ & \multicolumn{5}{c}{$\delta=1.1$} & \multicolumn{5}{c}{$\delta=1.5$} & \multicolumn{5}{c}{$\delta=2$} \\ \hline
+$\tau$ & \textbf{CV} & \textbf{Stable} & \textbf{Break} & \textbf{Equal} & \textbf{Bayesian} & \textbf{CV} & \textbf{Stable} & \textbf{Break} & \textbf{Equal} & \textbf{Bayesian} & \textbf{CV} & \textbf{Stable} & \textbf{Break} & \textbf{Equal} & \textbf{Bayesian}\\ \hline
+0.15 & 217.62 & 222.705 & 210.672 & 215.97 & 226.891 & 258.768 & 291.191 & 259.043 & 250.412 & 2440.467 & 303.483 & 378.171 & 303.72 & 317.039 & 2423.921\\
+0.2 & 254.859 & 258.024 & 254.992 & 254.558 & 432.377 & 232.446 & 336.434 & 232.661 & 261.394 & 2050.325 & 226.574 & 885.257 & 226.547 & 432.481 & 10541.22\\
+0.3 & 210.983 & 234.455 & 207.735 & 218.098 & 365.265 & 235.804 & 957.738 & 235.894 & 407.883 & 15096.85 & 228.207 & 6481.485 & 228.153 & 1841.499 & 123328.7\\ \hline \hline
+\end{tabular}
+\end{adjustbox}
+\end{sidewaystable}
+\newpage
+\begin{sidewaystable}
+\centering
+\caption{Continuous Break: Mean-Squared Forecast Error}
+\begin{adjustbox}{width=\textwidth,totalheight=\textheight,keepaspectratio}
+\begin{tabular}{cccccccccccccccc} \hline \hline
+ & \multicolumn{5}{c}{\textbf{Fixed Window}} & \multicolumn{5}{c}{\textbf{Recursive Window}} & \multicolumn{5}{c}{\textbf{Rolling Window}} \\ \hline
+$\delta$ & \textbf{CV} & \textbf{Stable} & \textbf{Break} & \textbf{Equal} & \textbf{Bayesian} & \textbf{CV} & \textbf{Stable} & \textbf{Break} & \textbf{Equal} & \textbf{Bayesian} & \textbf{CV} & \textbf{Stable} & \textbf{Break} & \textbf{Equal} & \textbf{Bayesian}\\ \hline
+1.1 & 27530.6 & 27733.23 & 27848.94 & 27192.2 & 27192.42 & 27860.04 & 27656.37 & 28804.05 & 28097.92 & 93188.44 & 24296.24 & 22295.65 & 25338.54 & 23575.82 & 140426.5\\
+1.5 & 50742.79 & 51160.34 & 51440.73 & 50173.04 & 50173.55 & 80398.22 & 80510.83 & 80501.99 & 80115.39 & 267769.1 & 131987.6 & 125540.7 & 132818.8 & 128390.5 & 566070.9\\
+2 & 89730.14 & 90517.16 & 91096.04 & 88785.1 & 88786.09 & 104734.1 & 100569.5 & 117443.3 & 107711.7 & 944565 & 142015.7 & 134353 & 146583.6 & 139954.2 & 537266.3\\ \hline \hline
+\end{tabular}
+\end{adjustbox}
+\end{sidewaystable}
+\newpage
+\begin{sidewaystable}
+\centering
+\caption{Mean--Square Forecast Error Comparison}
+\begin{tabular}{ccccc} \hline
+\textbf{CV Averaging} & \textbf{Post-Break Window} & \textbf{Equal Weights} & \textbf{Bayesian Averaging} & \textbf{Granger-Ramanathan Combination}\\ \hline
+0.1062787 & 0.1062486 & 0.1064143 & 0.1064134 & 0.1073477 \\ \hline
+\end{tabular}
+\end{sidewaystable}

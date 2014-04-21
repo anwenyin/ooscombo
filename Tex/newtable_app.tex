@@ -1,0 +1,36 @@
+\begin{table}
+    \caption{OOS U.S. Quarterly GDP Growth Rate Forecast Comparison} \label{ntb:3}
+    \centering
+    \begin{adjustbox}{width=\textwidth,totalheight=\textheight,keepaspectratio}
+    \begin{threeparttable}
+    \begin{tabular}{lccccccccccccccc}
+    \toprule
+     & \multicolumn{3}{c}{Model a} & \multicolumn{3}{c}{Model b} & \multicolumn{3}{c}{Model c} & \multicolumn{3}{c}{Model d} & \multicolumn{3}{c}{Model e}\\%[0.3em]
+    \cmidrule(r){2-4}
+    \cmidrule(r){5-7}
+    \cmidrule(r){8-10}
+    \cmidrule(r){11-13}
+    \cmidrule(r){14-16}\\
+           & Cp    & CV    & SIC  & Cp    & CV    & SIC & Cp    & CV    & SIC & Cp    & CV    & SIC & Cp    & CV    & SIC \\
+    P = 15 & 1.040 & 0.965 & 0.999& 1.043 & 0.995 &0.999& 1.004 & 0.998 &1.000& 1.027 & 0.976 &0.999& 1.041 & 0.964 &0.997 \\
+    P = 20 & 1.044 & 0.967 & 0.999& 1.031 & 0.983 &0.999& 1.017 & 0.987 &0.999& 1.038 & 0.970 &0.998& 1.043 & 0.960 &0.997 \\
+    P = 25 & 1.038 & 0.968 & 0.999& 1.021 & 0.984 &0.999& 1.036 & 0.976 &0.999& 1.038 & 0.969 &0.998& 1.017 & 0.967 &0.998 \\
+    P = 30 & 1.022 & 0.977 & 0.999& 1.022 & 0.983 &0.999& 1.007 & 0.996 &1.000& 1.013 & 0.991 &0.998& 1.032 & 0.975 &0.998 \\
+    P = 35 & 1.020 & 0.980 & 1.000& 1.036 & 0.996 &0.999& 1.022 & 0.983 &0.999& 1.024 & 0.983 &0.999& 1.034 & 0.973 &0.998 \\
+    P = 40 & 1.022 & 0.979 & 0.999& 1.012 & 0.987 &1.000& 1.024 & 0.982 &0.999& 1.025 & 0.982 &0.999& 1.033 & 0.974 &0.998 \\
+    P = 45 & 1.024 & 0.978 & 1.000& 1.014 & 0.986 &1.000& 1.025 & 0.982 &0.999& 1.026 & 0.981 &0.999& 1.037 & 0.974 &0.998 \\
+    P = 50 & 1.021 & 0.987 & 1.000& 1.011 & 0.989 &1.000& 1.027 & 0.984 &0.999& 1.023 & 0.987 &0.999& 1.022 & 0.988 &0.999 \\
+    \bottomrule
+    \end{tabular}
+    \begin{tablenotes}[para, flushleft] \footnotesize
+    Notes: Quarterly data from 1960:1 to 2012:1. $\mathrm{P}$ is the evaluation sample size. Equal weight is chosen as the benchmark and the numbers in the table represent the RMSFE ratio between each individual method and equal weight. Cp: Mallows' weights. CV: cross-validation weights. SIC: Schwarz-Bayesian weights.
+    \newline Model a: AR(1)
+    \newline Model b: AR(2)
+    \newline Model c: AR(1) + SR
+    \newline Model d: AR(1) + SR + LR
+    \newline Model e: AR(1) + SR + LR + DP
+    \end{tablenotes}
+    \end{threeparttable}
+    \end{adjustbox}
+    %\end{sidewaystable}
+\end{table}
