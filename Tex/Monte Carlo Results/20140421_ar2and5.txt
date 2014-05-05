@@ -1,0 +1,203 @@
+> rm(list=ls())
+> source('R/dgp_ar1.R')
+> source('R/dgp_ar2and5.R')
+> source('R/dgp_wild.R')
+> source('R/goos.R')
+> source('R/feval.R')
+> source('R/supfun.R')
+> 
+> set.seed(1234)
+> T <- 5000
+> #######################################################################################
+> #    #
+> # In this case, the DGP is AR(2) plus 5, but the forecasting model is just AR(1).  #
+> #  #
+> #######################################################################################
+> 
+> ########## ARCH
+> 
+> for (i in c(0.01,0.1,0.2,0.3,0.4)){
++   for (j in c(30,50)){
++     sim <- matrix(nrow=T,ncol=7)
++     for (m in 1:T){
++       dta <- DGP.ar2and5(T=200, P=j, Break=TRUE,hetero=TRUE, sigma=2, tau=0.3,delta=i, beta1=0)
++       y <- dta$y
++       X <- dta$X[,1]
++       temp <- feval(y=y,X=X,P=j,Window='recursive')$mat
++       sim[m,1] <- temp[1,1]
++       sim[m,2] <- temp[1,2]
++       sim[m,3] <- temp[1,3]
++       sim[m,4] <- temp[1,4]
++       sim[m,5] <- temp[1,5]
++       sim[m,6] <- temp[1,6]
++       sim[m,7] <- temp[1,7]
++     }
++     result <- matrix(nrow=2,ncol=7)
++     colnames(result) <- c("Cp","CV","SIC","S-W","Equal","Break","Stable")
++     rownames(result) <- c("RMSFE","Ratio")
++     result[1,] <-apply(sim,2,mean)
++     for (s in 1:7) result[2,s] <- result[1,s]/result[1,5]
++     cat("P = ",j,"delta = ",i,"True: Break Model with Heteroskedasticity-ARCH, Recursive Window","\n","\n")
++     print(round(result,4))
++     cat("\n")
++   }
++ }
+P =  30 delta =  0.01 True: Break Model with Heteroskedasticity-ARCH, Recursive Window 
+ 
+          Cp     CV    SIC    S-W  Equal  Break Stable
+RMSFE 1.3372 1.3172 1.3975 1.3306 1.3901 1.6126 1.3175
+Ratio 0.9619 0.9476 1.0053 0.9572 1.0000 1.1601 0.9478
+
+P =  50 delta =  0.01 True: Break Model with Heteroskedasticity-ARCH, Recursive Window 
+ 
+          Cp     CV    SIC    S-W  Equal  Break Stable
+RMSFE 1.3427 1.3268 1.3997 1.3427 1.3918 1.5985 1.3271
+Ratio 0.9647 0.9533 1.0057 0.9647 1.0000 1.1485 0.9535
+
+P =  30 delta =  0.1 True: Break Model with Heteroskedasticity-ARCH, Recursive Window 
+ 
+          Cp     CV    SIC    S-W  Equal  Break Stable
+RMSFE 1.6433 1.6250 1.6936 1.6373 1.6872 1.8958 1.6253
+Ratio 0.9740 0.9632 1.0038 0.9705 1.0000 1.1237 0.9634
+
+P =  50 delta =  0.1 True: Break Model with Heteroskedasticity-ARCH, Recursive Window 
+ 
+          Cp     CV    SIC    S-W  Equal  Break Stable
+RMSFE 1.6527 1.6371 1.7032 1.6547 1.6962 1.8970 1.6376
+Ratio 0.9744 0.9652 1.0042 0.9756 1.0000 1.1184 0.9655
+
+P =  30 delta =  0.2 True: Break Model with Heteroskedasticity-ARCH, Recursive Window 
+ 
+          Cp     CV    SIC    S-W Equal  Break Stable
+RMSFE 2.3175 2.3017 2.3635 2.3156 2.358 2.5617 2.3021
+Ratio 0.9828 0.9761 1.0023 0.9820 1.000 1.0864 0.9763
+
+P =  50 delta =  0.2 True: Break Model with Heteroskedasticity-ARCH, Recursive Window 
+ 
+          Cp     CV    SIC    S-W Equal  Break Stable
+RMSFE 2.3391 2.3246 2.3839 2.3436 2.378 2.5761 2.3250
+Ratio 0.9837 0.9775 1.0025 0.9855 1.000 1.0833 0.9777
+
+P =  30 delta =  0.3 True: Break Model with Heteroskedasticity-ARCH, Recursive Window 
+ 
+          Cp     CV    SIC    S-W Equal  Break Stable
+RMSFE 3.1329 3.1231 3.1713 3.1292 3.167 3.3596 3.1237
+Ratio 0.9892 0.9861 1.0014 0.9881 1.000 1.0608 0.9863
+
+P =  50 delta =  0.3 True: Break Model with Heteroskedasticity-ARCH, Recursive Window 
+ 
+          Cp     CV    SIC    S-W  Equal  Break Stable
+RMSFE 3.1482 3.1373 3.1857 3.1519 3.1811 3.3663 3.1379
+Ratio 0.9896 0.9862 1.0014 0.9908 1.0000 1.0582 0.9864
+
+P =  30 delta =  0.4 True: Break Model with Heteroskedasticity-ARCH, Recursive Window 
+ 
+          Cp     CV    SIC    S-W Equal  Break Stable
+RMSFE 4.0086 4.0050 4.0339 3.9985 4.031 4.1921 4.0057
+Ratio 0.9944 0.9935 1.0007 0.9919 1.000 1.0400 0.9937
+
+P =  50 delta =  0.4 True: Break Model with Heteroskedasticity-ARCH, Recursive Window 
+ 
+          Cp     CV    SIC    S-W  Equal  Break Stable
+RMSFE 4.0292 4.0270 4.0539 4.0263 4.0507 4.2061 4.0277
+Ratio 0.9947 0.9941 1.0008 0.9940 1.0000 1.0384 0.9943
+
+> 
+> 
+> #######################################################################################
+> #      #
+> # In this case, the DGP is AR(2) plus 5, but the forecasting model is just 4 predictors.  #
+> #  #
+> #######################################################################################
+> 
+> ########## ARCH
+> 
+> for (i in c(0.01,0.1,0.2,0.3,0.4)){
++   for (j in c(30,50)){
++     sim <- matrix(nrow=T,ncol=7)
++     for (m in 1:T){
++       dta <- DGP.ar2and5(T=200, P=j, Break=TRUE,hetero=TRUE, sigma=2, tau=0.3,delta=i, beta1=0)
++       y <- dta$y
++       X <- dta$X[,3:6]
++       temp <- feval(y=y,X=X,P=j,Window='recursive')$mat
++       sim[m,1] <- temp[1,1]
++       sim[m,2] <- temp[1,2]
++       sim[m,3] <- temp[1,3]
++       sim[m,4] <- temp[1,4]
++       sim[m,5] <- temp[1,5]
++       sim[m,6] <- temp[1,6]
++       sim[m,7] <- temp[1,7]
++     }
++     result <- matrix(nrow=2,ncol=7)
++     colnames(result) <- c("Cp","CV","SIC","S-W","Equal","Break","Stable")
++     rownames(result) <- c("RMSFE","Ratio")
++     result[1,] <-apply(sim,2,mean)
++     for (s in 1:7) result[2,s] <- result[1,s]/result[1,5]
++     cat("P = ",j,"delta = ",i,"True: Break Model with Heteroskedasticity-ARCH, Recursive Window","\n","\n")
++     print(round(result,4))
++     cat("\n")
++   }
++ }
+P =  30 delta =  0.01 True: Break Model with Heteroskedasticity-ARCH, Recursive Window 
+ 
+          Cp     CV    SIC    S-W  Equal  Break Stable
+RMSFE 1.2889 1.2859 2.6518 1.3220 2.0418 3.3806 1.2858
+Ratio 0.6312 0.6298 1.2987 0.6474 1.0000 1.6557 0.6297
+
+P =  50 delta =  0.01 True: Break Model with Heteroskedasticity-ARCH, Recursive Window 
+ 
+          Cp     CV    SIC    S-W Equal  Break Stable
+RMSFE 1.3171 1.3143 2.5646 1.3578 1.996 3.2374 1.3142
+Ratio 0.6599 0.6585 1.2849 0.6803 1.000 1.6220 0.6584
+
+P =  30 delta =  0.1 True: Break Model with Heteroskedasticity-ARCH, Recursive Window 
+ 
+          Cp     CV    SIC    S-W  Equal  Break Stable
+RMSFE 1.3151 1.3117 2.4865 1.3505 1.9793 3.1961 1.3116
+Ratio 0.6644 0.6627 1.2563 0.6823 1.0000 1.6148 0.6627
+
+P =  50 delta =  0.1 True: Break Model with Heteroskedasticity-ARCH, Recursive Window 
+ 
+          Cp     CV    SIC    S-W  Equal  Break Stable
+RMSFE 1.3225 1.3192 2.4007 1.3646 1.9248 3.0555 1.3191
+Ratio 0.6871 0.6854 1.2473 0.7090 1.0000 1.5874 0.6853
+
+P =  30 delta =  0.2 True: Break Model with Heteroskedasticity-ARCH, Recursive Window 
+ 
+          Cp     CV    SIC    S-W  Equal  Break Stable
+RMSFE 1.3468 1.3432 2.2933 1.3858 1.9011 2.9665 1.3431
+Ratio 0.7085 0.7066 1.2063 0.7290 1.0000 1.5605 0.7065
+
+P =  50 delta =  0.2 True: Break Model with Heteroskedasticity-ARCH, Recursive Window 
+ 
+          Cp     CV    SIC    S-W  Equal  Break Stable
+RMSFE 1.3604 1.3570 2.2405 1.4050 1.8663 2.8620 1.3569
+Ratio 0.7289 0.7271 1.2005 0.7528 1.0000 1.5335 0.7270
+
+P =  30 delta =  0.3 True: Break Model with Heteroskedasticity-ARCH, Recursive Window 
+ 
+          Cp     CV    SIC    S-W  Equal  Break Stable
+RMSFE 1.4487 1.4445 2.1785 1.4907 1.8916 2.7961 1.4444
+Ratio 0.7658 0.7636 1.1517 0.7881 1.0000 1.4782 0.7636
+
+P =  50 delta =  0.3 True: Break Model with Heteroskedasticity-ARCH, Recursive Window 
+ 
+          Cp     CV    SIC    S-W  Equal  Break Stable
+RMSFE 1.4619 1.4584 2.1279 1.5106 1.8579 2.6919 1.4584
+Ratio 0.7869 0.7850 1.1454 0.8131 1.0000 1.4489 0.7850
+
+P =  30 delta =  0.4 True: Break Model with Heteroskedasticity-ARCH, Recursive Window 
+ 
+          Cp     CV    SIC    S-W  Equal  Break Stable
+RMSFE 1.6274 1.6233 2.1442 1.6715 1.9538 2.6833 1.6232
+Ratio 0.8330 0.8308 1.0974 0.8555 1.0000 1.3734 0.8308
+
+P =  50 delta =  0.4 True: Break Model with Heteroskedasticity-ARCH, Recursive Window 
+ 
+          Cp     CV    SIC    S-W  Equal  Break Stable
+RMSFE 1.6384 1.6351 2.1059 1.6866 1.9276 2.5966 1.6351
+Ratio 0.8500 0.8483 1.0925 0.8750 1.0000 1.3471 0.8483
+
+> 
+> print("This simulation is done!")
+[1] "This simulation is done!"

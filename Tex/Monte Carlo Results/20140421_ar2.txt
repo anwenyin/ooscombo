@@ -1,0 +1,206 @@
+> set.seed(1234)
+> T <- 5000
+> 
+> #######################################################################################
+> #      
+> # In this case, the DGP is AR(2)+ARCH, but the forecasting model is just AR(1).  #
+> #  
+> #######################################################################################
+> 
+> 
+> for (i in c(0.01,0.1,0.2,0.3,0.4)){
++   for (j in c(30,50)){
++     sim <- matrix(nrow=T,ncol=7)
++     for (m in 1:T){
++       dta <- DGP.ar2(T=200, P=j, Break=TRUE,hetero=TRUE, sigma=2, tau=0.3,delta=i, beta1=0)
++       y <- dta$y
++       X <- dta$X[,1]
++       temp <- feval(y=y,X=X,P=j,Window='recursive')$mat
++       sim[m,1] <- temp[1,1]
++       sim[m,2] <- temp[1,2]
++       sim[m,3] <- temp[1,3]
++       sim[m,4] <- temp[1,4]
++       sim[m,5] <- temp[1,5]
++       sim[m,6] <- temp[1,6]
++       sim[m,7] <- temp[1,7]
++     }
++     result <- matrix(nrow=2,ncol=7)
++     colnames(result) <- c("Cp","CV","SIC","S-W","Equal","Break","Stable")
++     rownames(result) <- c("RMSFE","Ratio")
++     result[1,] <-apply(sim,2,mean)
++     for (s in 1:7) result[2,s] <- result[1,s]/result[1,5]
++     cat("P = ",j,"delta = ",i,"True: Break Model with ARCH Error, Recursive Window","\n","\n")
++     print(round(result,4))
++     cat("\n")
++   }
++ }
+P =  30 delta =  0.01 True: Break Model with ARCH Error, Recursive Window 
+ 
+          Cp     CV    SIC    S-W  Equal  Break Stable
+RMSFE 1.2776 1.2772 1.4033 1.3002 1.3623 1.6115 1.2772
+Ratio 0.9378 0.9375 1.0301 0.9544 1.0000 1.1829 0.9375
+
+P =  50 delta =  0.01 True: Break Model with ARCH Error, Recursive Window 
+ 
+          Cp     CV    SIC    S-W  Equal  Break Stable
+RMSFE 1.2830 1.2826 1.4057 1.3125 1.3658 1.6101 1.2825
+Ratio 0.9394 0.9391 1.0292 0.9610 1.0000 1.1789 0.9390
+
+P =  30 delta =  0.1 True: Break Model with ARCH Error, Recursive Window 
+ 
+          Cp     CV    SIC    S-W  Equal  Break Stable
+RMSFE 1.2796 1.2792 1.3896 1.3004 1.3555 1.5833 1.2791
+Ratio 0.9440 0.9437 1.0251 0.9593 1.0000 1.1680 0.9436
+
+P =  50 delta =  0.1 True: Break Model with ARCH Error, Recursive Window 
+ 
+          Cp     CV    SIC    S-W  Equal  Break Stable
+RMSFE 1.2804 1.2799 1.3880 1.3077 1.3546 1.5770 1.2798
+Ratio 0.9452 0.9449 1.0246 0.9653 1.0000 1.1642 0.9448
+
+P =  30 delta =  0.2 True: Break Model with ARCH Error, Recursive Window 
+ 
+          Cp     CV    SIC    S-W  Equal  Break Stable
+RMSFE 1.2772 1.2768 1.3701 1.2947 1.3428 1.5467 1.2768
+Ratio 0.9512 0.9509 1.0204 0.9642 1.0000 1.1519 0.9509
+
+P =  50 delta =  0.2 True: Break Model with ARCH Error, Recursive Window 
+ 
+          Cp     CV    SIC    S-W  Equal  Break Stable
+RMSFE 1.2807 1.2803 1.3692 1.3035 1.3431 1.5398 1.2803
+Ratio 0.9536 0.9533 1.0194 0.9705 1.0000 1.1465 0.9533
+
+P =  30 delta =  0.3 True: Break Model with ARCH Error, Recursive Window 
+ 
+          Cp     CV    SIC    S-W Equal  Break Stable
+RMSFE 1.2723 1.2722 1.3457 1.2851 1.325 1.5010 1.2724
+Ratio 0.9602 0.9601 1.0156 0.9699 1.000 1.1328 0.9603
+
+P =  50 delta =  0.3 True: Break Model with ARCH Error, Recursive Window 
+ 
+          Cp     CV    SIC    S-W  Equal  Break Stable
+RMSFE 1.2874 1.2869 1.3622 1.3083 1.3418 1.5152 1.2868
+Ratio 0.9595 0.9591 1.0152 0.9750 1.0000 1.1293 0.9590
+
+P =  30 delta =  0.4 True: Break Model with ARCH Error, Recursive Window 
+ 
+          Cp     CV    SIC    S-W  Equal  Break Stable
+RMSFE 1.2730 1.2726 1.3343 1.2848 1.3187 1.4711 1.2726
+Ratio 0.9653 0.9650 1.0118 0.9743 1.0000 1.1155 0.9650
+
+P =  50 delta =  0.4 True: Break Model with ARCH Error, Recursive Window 
+ 
+          Cp     CV    SIC    S-W  Equal  Break Stable
+RMSFE 1.2876 1.2872 1.3455 1.3034 1.3308 1.4788 1.2873
+Ratio 0.9676 0.9673 1.0111 0.9794 1.0000 1.1112 0.9673
+
+
+
+ rm(list=ls())
+> source('R/dgp_ar1.R')
+> source('R/dgp_ar2.R')
+> source('R/dgp_ar2and5.R')
+> source('R/dgp_wild.R')
+> source('R/goos.R')
+> source('R/feval.R')
+> source('R/supfun.R')
+> 
+> set.seed(1234)
+> T <- 5000
+> #######################################################################################
+> #        
+> # In this case, the DGP is AR(2)+GARCH, but the forecasting model is just AR(1).  #
+> #  
+> #######################################################################################
+> 
+> 
+> for (i in c(0.01,0.1,0.2,0.3,0.4)){
++   for (j in c(30,50)){
++     sim <- matrix(nrow=T,ncol=7)
++     for (m in 1:T){
++       dta <- DGP.ar2(T=200, P=j, Break=TRUE,hetero=TRUE, sigma=2, tau=0.3,delta=i, beta1=0.2)
++       y <- dta$y
++       X <- dta$X[,1]
++       temp <- feval(y=y,X=X,P=j,Window='recursive')$mat
++       sim[m,1] <- temp[1,1]
++       sim[m,2] <- temp[1,2]
++       sim[m,3] <- temp[1,3]
++       sim[m,4] <- temp[1,4]
++       sim[m,5] <- temp[1,5]
++       sim[m,6] <- temp[1,6]
++       sim[m,7] <- temp[1,7]
++     }
++     result <- matrix(nrow=2,ncol=7)
++     colnames(result) <- c("Cp","CV","SIC","S-W","Equal","Break","Stable")
++     rownames(result) <- c("RMSFE","Ratio")
++     result[1,] <-apply(sim,2,mean)
++     for (s in 1:7) result[2,s] <- result[1,s]/result[1,5]
++     cat("P = ",j,"delta = ",i,"True: Break Model with GARCH Error, Recursive Window","\n","\n")
++     print(round(result,4))
++     cat("\n")
++   }
++ }
+P =  30 delta =  0.01 True: Break Model with GARCH Error, Recursive Window 
+ 
+          Cp     CV    SIC    S-W  Equal  Break Stable
+RMSFE 1.5536 1.5531 1.6791 1.5770 1.6407 1.9047 1.5530
+Ratio 0.9469 0.9466 1.0234 0.9612 1.0000 1.1609 0.9466
+
+P =  50 delta =  0.01 True: Break Model with GARCH Error, Recursive Window 
+ 
+          Cp     CV    SIC    S-W Equal  Break Stable
+RMSFE 1.5606 1.5600 1.6822 1.5912 1.645 1.9025 1.5600
+Ratio 0.9487 0.9483 1.0226 0.9673 1.000 1.1565 0.9483
+
+P =  30 delta =  0.1 True: Break Model with GARCH Error, Recursive Window 
+ 
+          Cp     CV    SIC    S-W  Equal  Break Stable
+RMSFE 1.5560 1.5555 1.6648 1.5768 1.6332 1.8732 1.5554
+Ratio 0.9527 0.9524 1.0193 0.9654 1.0000 1.1469 0.9524
+
+P =  50 delta =  0.1 True: Break Model with GARCH Error, Recursive Window 
+ 
+          Cp     CV    SIC    S-W  Equal  Break Stable
+RMSFE 1.5578 1.5571 1.6622 1.5851 1.6319 1.8637 1.5570
+Ratio 0.9545 0.9541 1.0185 0.9713 1.0000 1.1420 0.9541
+
+P =  30 delta =  0.2 True: Break Model with GARCH Error, Recursive Window 
+ 
+          Cp     CV    SIC    S-W  Equal  Break Stable
+RMSFE 1.5500 1.5495 1.6403 1.5666 1.6154 1.8281 1.5496
+Ratio 0.9595 0.9592 1.0154 0.9698 1.0000 1.1317 0.9592
+
+P =  50 delta =  0.2 True: Break Model with GARCH Error, Recursive Window 
+ 
+          Cp     CV    SIC    S-W Equal  Break Stable
+RMSFE 1.5571 1.5566 1.6411 1.5789 1.618 1.8202 1.5566
+Ratio 0.9624 0.9621 1.0143 0.9759 1.000 1.1250 0.9621
+
+P =  30 delta =  0.3 True: Break Model with GARCH Error, Recursive Window 
+ 
+          Cp     CV    SIC    S-W  Equal  Break Stable
+RMSFE 1.5432 1.5431 1.6124 1.5543 1.5943 1.7742 1.5433
+Ratio 0.9680 0.9679 1.0114 0.9749 1.0000 1.1129 0.9680
+
+P =  50 delta =  0.3 True: Break Model with GARCH Error, Recursive Window 
+ 
+          Cp     CV    SIC    S-W  Equal  Break Stable
+RMSFE 1.5674 1.5668 1.6368 1.5863 1.6192 1.7952 1.5668
+Ratio 0.9680 0.9677 1.0109 0.9797 1.0000 1.1087 0.9677
+
+P =  30 delta =  0.4 True: Break Model with GARCH Error, Recursive Window 
+ 
+          Cp     CV    SIC    S-W  Equal  Break Stable
+RMSFE 1.5462 1.5458 1.6024 1.5556 1.5893 1.7427 1.5459
+Ratio 0.9728 0.9726 1.0082 0.9788 1.0000 1.0965 0.9727
+
+P =  50 delta =  0.4 True: Break Model with GARCH Error, Recursive Window 
+ 
+          Cp     CV    SIC    S-W  Equal  Break Stable
+RMSFE 1.5669 1.5665 1.6188 1.5800 1.6066 1.7541 1.5666
+Ratio 0.9753 0.9750 1.0076 0.9835 1.0000 1.0918 0.9751
+
+> 
+> print("This simulation is done!")
+[1] "This simulation is done!"
+
