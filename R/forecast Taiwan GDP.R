@@ -21,6 +21,11 @@ gdp.lag1<-gdp.qr06[-T]
 feval(y=gdp.lead,X=gdp.lag1,P=5, Window='recursive')$mat
 summary(lm(gdp.lead~gdp.lag1)) # model check
 
+for (i in seq(20,50,by=5)){
+  print(feval(y=gdp.lead,X=gdp.lag1,P=i, Window='recursive')$mat)
+}
+
+
 # AR(2) forecast model
 
 gdp.lead<-gdp.qr06[-1:-2]
@@ -28,6 +33,10 @@ gdp.lag1<-gdp.qr06[c(-1,-T)]
 gdp.lag2<-gdp.qr06[-(T-1):-T]
 feval(y=gdp.lead,X=cbind(gdp.lag1,gdp.lag2),P=50, Window='recursive')$mat
 summary(lm(gdp.lead~gdp.lag1+gdp.lag2)) # model check, AR(2) coef insignificant
+
+for (i in seq(15,50,by=5)){
+  print(feval(y=gdp.lead,X=cbind(gdp.lag1,gdp.lag2),P=i, Window='recursive')$mat)
+}
 
 ### Annual Data, 2006 real NTW dollar #############
 
