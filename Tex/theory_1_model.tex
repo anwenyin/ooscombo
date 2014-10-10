@@ -1,0 +1,19 @@
+\section{Econometric Theory}
+\subsection{Model and Estimation}
+The econometric model used to forecast and its estimation method are closely related to Hansen \cite{hansen2009averaging} and Andrews \cite{andrews93}.\footnote{Andrews considers GMM as the primary estimation method.} The model we are interested in is a linear time series regression with a possible structural break in the conditional mean. The observations we have are time series $\{y_t,x_t\}$ for $t = 1,...,T$, where $y_t$\footnote{Since we are interested in forecasting, $y_t$ can be thought of as the variable to be predicted for the next period using currently available information $x_t$.} is the scalar dependent variable and $x_t$ is a $k\times 1$ vector of related predictors and possibly lagged values of $y_t$, $k$ is the total number of regressors or predictors included. Parameters are estimated by ordinary least squares. The forecasting model allowing for structural break is:
+\begin{equation} \label{mod:1}
+	y_t = x_t'\beta_1 I_{[t<m]} + x_t'\beta_2 I_{[t \geq m]} + e_t
+\end{equation}
+where $I_{[\bullet]}$ is an indicator function, $m$ is the time index of the break and $E(e_t|x_t) = 0$. The break date is restricted to the interval $[m_1,m_2]$ which is bounded away from the ends of the sample on both sides, $1 < m_{1} < m_{2} < T$. In practice, a popular choice is to use the middle $70\%$ portion of the sample. We assume that all information relevant for forecasting is included in the regressors $x_t$, and the source of model misspecification comes solely from the uncertainty about parameter stability. This is in contrast to many applied econometric models where model misspecification bias comes from the wrong choice of regressors but the parameters are assumed stable.
+
+We can also use a stable linear model to forecast:
+\begin{equation} \label{mod:2}
+	y_t = x_t'\beta + e_t
+\end{equation}
+The traditional pre-test procedure starts with performing a test for structural breaks\footnote{This can be done in various ways. One is to treat various possible number of breaks as different models, then select one according to some information criterion, e.g., AIC, SIC or Mallow's. Another way is hypothesis testing, following the relevant testing procedures outlined in Andrews \cite{andrews93}, Bai and Perron \cite{bai_perron98} and Elliot and Muller \cite{elliott_muller_RES2006}.}, either by using Andrews' SupF or SupW test, or Bai and Perron's multiple-break test, and then decide to keep the stable or unstable model.
+
+As an alternative to model selection, we can combine these two models by assigning weight $w$ to model~\ref{mod:1} and $1 - w$ to model~\ref{mod:2}, where $w \geq 0$. So the combined predictive model is
+\begin{equation} \label{mod:3}
+    y_{t} = w \left\{ x_t'\beta_1 I_{[t<m]} + x_t'\beta_2 I_{[t \geq m]} \right\} + (1 - w) \left\{ x_t'\beta \right\} + e_t
+\end{equation}
+With the forecasting model ready, next, we are going to present the cross-validation criterion in detail which is crucial in determining the optimal weight $w$ in equation~\ref{mod:3}.

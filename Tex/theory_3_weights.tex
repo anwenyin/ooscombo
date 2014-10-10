@@ -1,0 +1,63 @@
+\subsection{Cross-Validation Weights}
+We start this section by listing relevant assumptions needed for our results.
+\begin{assumption}\label{asump:1}
+Suppose the following holds:
+	\begin{enumerate}
+		\item The true data generating process satisfies the linear process $y_t = x_t'\beta_t + e_t$, $t=1,...,T,\beta_t \in \mathbb{R}^k$, where $\beta_t = \beta + T^{-1/2}\eta(t/T)\delta\sigma_t$. $\eta(\bullet)$ is a $\mathbb{R}^k$ valued Riemann integrable function on $[0,1]$ and $\delta \in \mathbb{R}\backslash\{0\}$ is a scalar indexing the magnitude of parameter variation, $\sigma_{t}$ is the standard deviation of the error term at period $t$.
+		\item $\{(x_t',e_t)\}$ is $\alpha$-mixing of size $-r/(r-2),r > 2$ or $\phi$-mixing of size $-r/(2r-2),r \geq 2$.
+	    \item $E(x_t e_t) = 0, \forall t$, and the process $\{x_t e_t\}$ is uniformly $L_r$-bounded, i.e., $||x_t e_t||_{r} < B$, where $B$ is a constant and $B < \infty$.
+	    \item $T^{-1/2}\sum_{t=1}^{[\pi T]} x_t e_t \Rightarrow W(\pi)$ where $W(\pi)$ is a $k \times 1$ Wiener process with symmetric, positive definite long-run covariance matrix $\Sigma \equiv \lim\limits_{T\to \infty}\mathrm{VAR}(T^{-1/2}\sum_{t=1}^{[\pi T]} x_t e_t)$, for $0 \leq \pi \leq 1$. ` $\Rightarrow$' denotes the weak convergence of the underlying probability measure as $T \to \infty$.
+		\item $T^{-1}\sum_{t=1}^{[\pi T]}x_t x_t'$ converges uniformly to $\pi Q$ for all $\pi \in [0,1]$, $Q = E(x_t x_t')$ and all eigenvalues of $Q$ are uniformly bounded away from zero. $[\pi T]$ denotes the integer part of the product $\pi T$.
+		\item $E(e_t|x_t) = 0$ ; $E(e_t^{2}|x_t) = \sigma_t^{2}$.
+	\end{enumerate}
+\end{assumption}
+Assumption 1.1 says that the true data generating process for $y_t$ takes a general parameter variation form and structural break occurs in all parameters. In each period, the change of the true parameter value is of small magnitude so that the asymptotic distributions are asymptotically continuous. Additionally, the parameter variation is proportional to the unconditional standard deviation of the error term, so the impact of parameter instability will not be dominated by that of the volatility. This type of data generating process is quite general, as it includes several commonly used models, for example, the single break model with the absolute change of parameter values positive in one period while zero in others.
+
+In practice, if there is no clear guidance or information on which subset of parameters are unstable \emph{a priori}, it is natural to assume that all parameters are subject to break. This full-break in the conditional mean assumption is less restrictive, so empirically it is adopted in applications of detecting and dating breaks, see Rapach and Wohar \cite{rapach_wohar_JFE2006} and Paye and Timmermann \cite{paye_timmermann_JEF2006}.
+
+Notice that our predictive model outlined earlier only allows for one possible break in the conditional mean, so it is highly possible that the forecasting model, either the pre-test model or the averaged model, is misspecified. We make this assumption allowing for the gap between the true data generating process and the forecasting model primarily for two reasons. First, in practice the true data generating process is almost always unknown to researchers, as it may be a complicated process possibly involving past values of infinite order. In addition, the true dynamics and parameter stability are very difficult to capture by models based on limited information. Second, for the prediction problem, the goal is not to come up with a highly complex model to fit the training data as closely as possible measured in terms of the learning error rate. Instead, forecasters pay more attention to the test error rate. By reducing the complexity of the predictive model, we hope our model to be more adaptive to environment change in the future.
+
+Assumption 1.2 -- 1.5 ensure that we can apply all relevant mixing laws of large numbers, functional central limit theorem or Donsker's invariance principle when proving our results. See Davidson \cite{davidson_textbook} for more details on advanced asymptotic theory. Assumption 1.6 says that the error term is conditionally heteroscedastic which is less restrictive.
+
+To obtain model weights, first, we need to show what the cross-validation criterion looks like under the above assumptions. We know that the information criterion usually consists of two parts, one measuring in-sample fit while the other penalizing overfitting. For model averaging, the penalty term is crucial in determining the optimal weights. The proofs of all theoretical results are provided in the appendix.
+
+\begin{proposition} \label{thm:1}
+If assumption~\ref{asump:1} holds but $E(e_t^{2}|x_t) = \sigma^{2}$, the leave-one-out cross--validation criterion is asymptotically equivalent to Mallows' criterion, that is, $E(CV(T)) \stackrel{p}{\rightarrow} E(Cp(T))$.
+\end{proposition}
+
+The intuition for this result is that since the cross-validation criterion is robust to heteroscedasticity compared with Mallows' criterion, so when conditional heteroscedasticity is absent, we would not expect any significant difference between CV and Cp. With this result in hand, we can obtain the feasible sample optimal weight for the break model:
+
+\begin{corollary} \label{corollary:1}
+The feasible sample CV weight for the break model is:
+    \begin{equation}
+    \hat{w} = \frac{(T - 2k)(\sum_{t=1}^{T}\tilde{e}_{t}^{2} - \sum_{t=1}^{T}\hat{e}_{t}^{2}) - \bar{p}\sum_{t=1}^{T}\hat{e}_{t}^{2}}{(T - 2k)(\sum_{t=1}^{T}\tilde{e}_{t}^{2} - \sum_{t=1}^{T}\hat{e}_{t}^{2})}
+    \end{equation}
+if $(T - 2k)(\sum_{t=1}^{T}\tilde{e}_{t}^{2} - \sum_{t=1}^{T}\hat{e}_{t}^{2})(\sum_{t=1}^{T}\hat{e}_{t}^{2})^{-1} \geq \bar{p}$ while $\hat{w} = 0$ otherwise. $T$ is the sample size, $k$ is the number of regressors, $\hat{e}_t$s are the ordinary least squares residuals from the break model, $\tilde{e}_t$s are residuals from the stable model, $\bar{p}$ is the penalty coefficient whose value depends on the asymptotic distribution of the SupW test statistic.
+\end{corollary}
+
+By proposition~\ref{thm:1}, Hansen's weights \cite{hansen2009averaging} still apply in this case. Following Hansen, the population penalty term in the cross-validation criterion involves a distribution which is a function of the true data generating process. To obtain the feasible sample optimal weights, the sample CV penalty term is approximated by averaging two extreme cases \footnote{One is that the break size is extremely large while in the other case the break size is $0$.}, so that is how Hansen's $\bar{p}$ value enters the formula for the break model weight.
+
+It is widely known in the model selection literature that the CV criterion is superior to Mallows' and other information criteria because of its robustness to heteroscedasticity \cite{andrews_JE1991}, our next proposition establishes the asymptotic distribution of the CV penalty term in the presence of conditional heteroscedasticity.
+\begin{proposition} \label{thm:2}
+If Assumption~\ref{asump:1} holds, then the penalty term in the cross-validation criterion converges in distribution to a weighted sum of independent $\chi^2$ distribution with degree of freedom one, plus a term whose distribution is a function of the Brownian bridge,
+    \begin{equation} \label{eq:4}
+    	e'P(\hat{m})e \stackrel{d}{\rightarrow} \sum_{j=1}^{k} \lambda_j \chi^2(1) + J_0(\xi_{\delta})
+    \end{equation}
+where $\lambda_j$s are the eigenvalues of the matrix $Q^{-1}\Sigma$, $\Sigma$ is the long-run variance of $\rn\jian X_t e_t$, $Q = E(x_t x_t')$ and $J_0(\xi_{\delta})$ is the asymptotic distribution of the Sup-Wald type statistic under the true data generating process.
+\end{proposition}
+
+Comparing this result with Hansen's, we can see that the distribution under conditional homoscedasticity is just a special case of what is shown in proposition~\ref{thm:2}. That is, the weights for the $\chi^2$ random variables are identical and they take the value of one, which results in a $\chi^2$ distribution with degrees of freedom equal to the total number of regressors. In our results, $\lambda_j$s can take different values which capture the impact brought to the weight by allowing for conditional heteroscedasticity. Intuitively, the first term on the right-hand-side of equation~\ref{eq:4} reflexes the impact of conditional heteroscedasticity while the second term deals with structural break.
+
+The expectation of $\sum_{j=1}^{k} \lambda_j \chi^2(1)$ is simply $\sum_{j=1}^{k} \lambda_j$ which is the trace of the matrix $Q^{-1} \Sigma$, where $\Sigma$ is the long-run variance of $\rn\jian X_t e_t$ and $Q = E(x_t x_t')$. Empirically, $\Sigma$ can be estimated by HAC estimators and $Q$ can be consistently estimated by its sample analogue $\frac{1}{T}\sum_{t=1}^{T}x_t x_t'$. The feasible sample optimal weight for the break model in this case is:
+
+\begin{corollary} \label{corollary:2}
+The feasible sample optimal weight for the break model in the presence of conditional heteroscedasticity takes the form:
+    \begin{equation} \label{eq:5}
+    	\hat{w} = 1 - \frac{\mathrm{tr}\left(\hat{Q}^{-1}\hat{\Sigma}\right) + 2\bar{p} - k}{2\left(\sum_{t=1}^{T}\tilde{e}_t^2 - \sum_{t=1}^{T}\hat{e}_t^2\right)}
+    \end{equation}
+if $(\sum_{t=1}^{T}\tilde{e}_{t}^{2} - \sum_{t=1}^{T}\hat{e}_{t}^{2}) \geq \bar{p}^{*}$ while $\hat{w} = 0$ otherwise. $\hat{e}_t$s are the OLS residuals from the break model and $\tilde{e}_t$s are residuals from the stable model, $\mathrm{tr}(\hat{Q}^{-1}\hat{\Sigma})$ is the trace of the matrix $\hat{Q}^{-1}\hat{\Sigma}$, $\bar{p}^{*} = \frac{1}{2}(\mathrm{tr}(\hat{Q}^{-1}\hat{\Sigma}) + 2\bar{p} - k)$.
+\end{corollary}
+
+Again, $\bar{p}$ comes from averaging two extreme cases approximating the infeasible expectation of the population penalty term.
+
+In the next section, through several designs we are going to assess the sample performance of CV weights comparing with Cp wieghts and other related methods in controlled simulations. 
