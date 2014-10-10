@@ -14,6 +14,7 @@ where $h_t = x_t'(X'X)^{-1}x_t$ is the leverage associated with observation $t$.
     \end{eqnarray*}
 Under regularity conditions listed in Assumption~\ref{asump:1}, we have $\hat{\sigma}^2 \stackrel{p}{\rightarrow} \sigma^{2}$, and for the penalty term,  $\frac{1}{T} \sum_{i=1}^T \hat{e_t}^2 x_t' (X'X)^{-1} x_t \stackrel{p}{\rightarrow} E(\boldmath{e'Pe})$, putting these two parts together, we can see that CV is asymptotically equivalent to Mallows' Cp under our assumptions except for conditionally homoscedastic errors.
 \end{proof}
+<<<<<<< HEAD
 
 \begin{proof}[Proof of Corollary~\ref{corollary:1}]
 Since CV is asymptotically equivalent to Mallows' Cp, following Hansen's \cite{hansen2009averaging} proof, write the sample CV criterion for the weighted model as a function of the break model weight $w$,
@@ -26,6 +27,26 @@ where $\bar{p}$ proposed by Hansen is used to approximate the infeasible expecte
     \end{equation*}
 if $(T - 2k)(\sum_{t=1}^{T}\tilde{e}_{t}^{2} - \sum_{t=1}^{T}\hat{e}_{t}^{2})(\sum_{t=1}^{T}\hat{e}_{t}^{2})^{-1} \geq \bar{p}$ while $\hat{w} = 0$ otherwise.
 \end{proof}
+=======
+\begin{proof}[Proof of Lemma~\ref{thm:2}]
+We relax the conditional homoscedasticity assumption in Hansen's Mallow's model averaging method when there is a possible structural break in the underlying DGP. The proof is adapted from Hansen \cite{hansen2009averaging} and Andrews \cite{andrews93} without assuming conditional homoscedasticity. The CV penalty term can be expanded as:
+\begin{eqnarray*}
+e'P(k)e & = & e'Pe + e'P^{*}(k)e \\
+        & = & e'Pe + e'X^{*}(k)(X^{*}(k)'X^{*}(k))^{-1}X^{*}(k)'e
+\end{eqnarray*}
+where the notations for $P$,$P^{*}(k)$ and $X^{*}(k)$ are the same as in Hansen \cite{hansen2009averaging}.
+
+For the second term, $e'X^{*}(k)(X^{*}(k)'X^{*}(k))^{-1}X^{*}(k)'e$, we can see
+\begin{eqnarray*}
+X^{*}(k)'X^{*}(k) & = & (X(k)-X(X'X)^{-1}X(k)'X(k))'(X(k)-X(X'X)^{-1}X(k)'X(k)) \\
+                  & = & X(k)'X(k) - X(k)'X(X'X)^{-1}X(k)'X(k) \\
+				  &   & - X(k)'X(k)(X'X)^{-1}X'X(k) + X(k)'X(k)(X'X)^{-1}X(k)'X(k) \\
+				  & \stackrel{P}{\rightarrow} & \pi Q - \pi QQ^{-1} \pi Q - \pi QQ^{-1} \pi Q + \pi QQ^{-1} \pi Q \\
+				  & = & \pi (1-\pi)Q
+\end{eqnarray*}
+
+By continuous mapping theorem we have $(X^{*}(k)'X^{*}(k))^{-1}\stackrel{P}{\rightarrow}(\pi (1-\pi))^{-1}Q^{-1}$.
+>>>>>>> 2966618e04912eba46807909c13546d2481a77e9
 
 \begin{proof}[Proof of Proposition~\ref{thm:2}]
 The proof of this proposition is adapted from Hansen \cite{hansen2009averaging}. By projection arguments, $P(m) = P + P^{*}(m)$, where $P = X(X'X)^{-1}X'$, $P^{*}(m) = X^{*}(m)(X^{*}(m)'X^{*}(m))^{-1}X^{*}(m)'$, $X^{*}(m) = X(m) - PX(m) = X(m) - X(X'X)^{-1}X'X(m) = X(m) - X(X'X)^{-1}X(m)'X(m)$, and $X(m)$ is the matrix of stacked regressors $x_{t}(t < m)$, the cross-validation penalty term can be expanded as:
@@ -83,10 +104,18 @@ so
     \end{equation*}
 where $W(1)$ is the Brownian motion vector with covariance matrix $\Sigma \equiv \lim\limits_{n\to\infty}$VAR$(\rn\jian X_i e_i)$, and $W(\pi)$ is the Brownian vector at time $\pi$.
 
+<<<<<<< HEAD
 \noindent Putting together results obtained above, we have
     \begin{equation*}
         \frac{1}{\sqrt{T}} X^{*}(m)'e \Rightarrow W(\pi) - \pi W(1)
     \end{equation*}
+=======
+\begin{eqnarray*}
+e'P^{*}(k)e & = & e'X^{*}(k)(X^{*}(k)'X^{*}(k))^{-1}X^{*}(k)'e \\
+            & \stackrel{P}{\rightarrow} & \frac{1}{\pi(1-\pi)} (W(\pi) - \pi W(1))'Q^{-1}(W(\pi) - \pi W(1)) =  \frac{\mathbf{B}(\pi)'\mathbf{B}(\pi)}{\pi(1-\pi)}\equiv J_0(\xi_{\delta})
+\end{eqnarray*}
+where $\mathbf{B}(\pi)$ is a Brownian bridge. Combined with Hansen's \cite{hansen2009averaging} theorem 1 without assuming conditional homoscedasticity or Andrews' \cite{andrews93} theorem 4, our results follow.
+>>>>>>> 2966618e04912eba46807909c13546d2481a77e9
 
 \noindent Then we have
     \begin{equation*}
@@ -103,6 +132,7 @@ where $\mathbf{B}(\pi)$ is a Brownian bridge. Combined with Hansen's \cite{hanse
       \frac{1}{\sqrt{T}} \jian x_t e_t \Rightarrow W(1)
     \end{equation*}
 
+<<<<<<< HEAD
     \begin{equation*}
       \frac{1}{T} \jian x_t x_t' \stackrel{p}{\rightarrow} Q
     \end{equation*}
@@ -111,6 +141,9 @@ so
       e'Pe \stackrel{p}{\rightarrow} \Xi' Q^{-1} \Xi
     \end{equation*}
 where $\Xi \sim N(0, \Sigma)$ .
+=======
+Under the assumption of conditional homoscedasticity, the above distribution is a $\chi^2$ distribution times the variance of the population error. If we relax the assumption of conditional homoscedasticity, $e'Pe$ does not converge to a $\chi^2$ distribution, instead, it converges to a weighted sum of $\chi^2$ distribution of one degree of freedom.
+>>>>>>> 2966618e04912eba46807909c13546d2481a77e9
 
 \noindent $\Sigma$ is symmetric and positive definite, $Q^{-1}$ is of the same rank of $\Sigma$, applying results of the distribution of quadratic forms (see section 5.4 of Ravishanker and Dipak \cite{linear_model_textbook}), we have
     \begin{equation*}
@@ -118,6 +151,7 @@ where $\Xi \sim N(0, \Sigma)$ .
     \end{equation*}
 where $\lambda_j$s are the eigenvalues of the matrix $Q^{-1}\Sigma$, $\chi^2(1)$ is a random variable having the $\chi^2$ distribution with degree of freedom one. 
 
+<<<<<<< HEAD
 \noindent Collecting all results shown above, we have
     \begin{equation*}
       e'P(\hat{m})e \stackrel{d}{\rightarrow} \sum_{j=1}^{k} \lambda_j \chi^2(1) + J_0(\xi_{\delta})
@@ -138,4 +172,13 @@ we have $E(\sum_{j=1}^{k} \lambda_j \chi^2(1)) = \sum_{j=1}^{k} \lambda_j$, appl
       \hat{w} = 1 - \frac{\mathrm{tr}\left(\hat{Q}^{-1}\hat{\Sigma}\right) + 2\bar{p} - k}{2\left(\sum_{t=1}^{T}\tilde{e}_t^2 - \sum_{t=1}^{T}\hat{e}_t^2\right)}
     \end{equation*}
 if $(\sum_{t=1}^{T}\tilde{e}_{t}^{2} - \sum_{t=1}^{T}\hat{e}_{t}^{2}) \geq \bar{p}^{*}$ while $\hat{w} = 0$ otherwise.
+=======
+\begin{eqnarray*}
+e'Pe & \stackrel{d}{\rightarrow} & \sum_{j=1}^{k} \lambda_j \chi^2(1)
+\end{eqnarray*}
+where $\lambda_j$s are the eigenvalues of the matrix $L'Q^{-1}L$, $\Sigma = LL'$. Although the asymptotic distribution is not pivotal, since we are only interested in the first moment of this distribution, we can easily obtain its value by $\mathrm{E}(e'Pe) = \sum_{j=1}^{k} \lambda_j = \tr{(L'Q^{-1}L)} = \tr{(Q^{-1} \Sigma)}$, where $Q$ and $\Sigma$ can be estimated by their sample analogues. This can be done without relying on potentially time-consuming Monte Carlo simulation.
+\end{proof}
+\begin{proof}[Proof of Theorem~\ref{lem:2}]
+The proof of this theorem follows Hansen\cite{hansen2009averaging}, just replace all relevant terms according to Theorem~\ref{thm:2}.
+>>>>>>> 2966618e04912eba46807909c13546d2481a77e9
 \end{proof}

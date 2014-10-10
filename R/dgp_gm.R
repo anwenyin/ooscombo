@@ -33,11 +33,7 @@ DGP.gm<-function(T,P,Break=FALSE,hetero=FALSE, sigma=2, tau=0.3,delta=0.5,delta_
   if (Break==FALSE && hetero==FALSE){
     
     e <- rnorm((T+B),0,sigma)
-    
-    for (i in 3:(T+B)) {
-      y[i] <- mu + rho1*y[i-1] + rho2*y[i-2] + e[i]
-    }
-    
+    invisible(unlist(lapply(3:(T+B), function(i) y[i] <<- mu + rho1*y[i-1] + rho2*y[i-2] + e[i])))
     x[,1] <- y[B:(T+B-1)]
     x[,2] <- y[(B-1):(T+B-2)]
     y <- y[(B+1):(T+B)]
@@ -57,14 +53,8 @@ DGP.gm<-function(T,P,Break=FALSE,hetero=FALSE, sigma=2, tau=0.3,delta=0.5,delta_
       # e <- rnorm((T+B),0,sigma)
       t0 <- floor(tau*R)
       
-      for (i in 3:(B+t0)) {
-        e[i] <- rnorm(1,sd=sigma)
-        y[i] <- mu + rho1*y[i-1] + rho2*y[i-2] + e[i] 
-      }
-      for (i in (B+t0+1):(T+B)) {
-        e[i] <- rnorm(1,sd=delta_gm*sigma)
-        y[i] <- delta*mu + delta*rho1*y[i-1] + delta*rho2*y[i-2] + e[i]
-      }
+      invisible(unlist(lapply(3:(B+t0), function(i) {e[i] <<- rnorm(1,sd=sigma); y[i] <<- mu + rho1*y[i-1] + rho2*y[i-2] + e[i]})))
+      invisible(unlist(lapply((B+t0+1):(T+B), function(i) {e[i] <<- rnorm(1,sd=delta_gm*sigma); y[i] <<- delta*mu + delta*rho1*y[i-1] + delta*rho2*y[i-2] + e[i]})))
       
       x[,1] <- y[B:(T+B-1)]
       x[,2] <- y[(B-1):(T+B-2)]
@@ -86,14 +76,8 @@ DGP.gm<-function(T,P,Break=FALSE,hetero=FALSE, sigma=2, tau=0.3,delta=0.5,delta_
     h[1] <- rnorm(1)^2
     e[1] <- v[1]*sqrt(h[1])
     
-    for (i in 2:(T+B)){
-      h[i] <- alpha0 + alpha1*e[i-1]^2 + beta1*h[i-1]
-      e[i] <- v[i]*sqrt(h[i])
-    }
-    
-    for (i in 3:(T+B)) {
-      y[i] <- mu + rho1*y[i-1] + rho2*y[i-2] + e[i]
-    }
+    invisible(unlist(lapply(2:(T+B), function(i) {h[i] <<- alpha0 + alpha1*e[i-1]^2 + beta1*h[i-1]; e[i] <<- v[i]*sqrt(h[i])})))
+    invisible(unlist(lapply(3:(T+B), function(i) {y[i] <<- mu + rho1*y[i-1] + rho2*y[i-2] + e[i]})))
     
     x[,1] <- y[B:(T+B-1)]
     x[,2] <- y[(B-1):(T+B-2)]
@@ -118,21 +102,10 @@ DGP.gm<-function(T,P,Break=FALSE,hetero=FALSE, sigma=2, tau=0.3,delta=0.5,delta_
       h[1] <- rnorm(1)^2
       e[1] <- v[1]*sqrt(h[1])
       
-      for (i in 2:(B+t0)) {
-        h[i] <- alpha0 + alpha1*e[i-1]^2 + beta1*h[i-1]
-        e[i] <- v[i]*sqrt(h[i])
-      }
-      for (i in (B+t0+1):(T+B)) {
-        h[i] <- delta_gm*alpha0 + delta_gm*alpha1*e[i-1]^2 + delta_gm*beta1*h[i-1]
-        e[i] <- v[i]*sqrt(h[i])
-      }
-  
-      for (i in 3:(B+t0)) {
-        y[i] <- mu + rho1*y[i-1] + rho2*y[i-2] + e[i]
-      }
-      for (i in (B+t0+1):(T+B)) {
-        y[i] <- delta*mu + delta*rho1*y[i-1] + delta*rho2*y[i-2] + e[i]
-      }
+      invisible(unlist(lapply(2:(B+t0), function(i) {h[i] <<- alpha0 + alpha1*e[i-1]^2 + beta1*h[i-1]; e[i] <<- v[i]*sqrt(h[i])})))
+      invisible(unlist(lapply((B+t0+1):(T+B), function(i) {h[i] <<- delta_gm*alpha0 + delta_gm*alpha1*e[i-1]^2 + delta_gm*beta1*h[i-1]; e[i] <<- v[i]*sqrt(h[i])})))
+      invisible(unlist(lapply(3:(B+t0), function(i) {y[i] <<- mu + rho1*y[i-1] + rho2*y[i-2] + e[i]})))
+      invisible(unlist(lapply((B+t0+1):(T+B), function(i) {y[i] <<- delta*mu + delta*rho1*y[i-1] + delta*rho2*y[i-2] + e[i]})))
       
       x[,1] <- y[B:(T+B-1)]
       x[,2] <- y[(B-1):(T+B-2)]

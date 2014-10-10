@@ -1,0 +1,77 @@
+May 08, 2014
+
+On sldies:
+
+P11: reqrite "break not detected", should use if no break...
+
+P16: delete theorem 1
+
+P16: should use "not optimal", not "incorrect". Add no break case in the Monte Carlo and explain why SIC is getting worse.
+
+Use THICKER lines for graph so it looks better when projected.
+
+Monte Carlo Great Moderation Design:
+
+	- add details on how to estimate the break model
+	- understand what causes those differences
+
+Add all stuff I wrote on the whiteboard to my slides: needs more info for non-econometricians
+
+Add a simple example.
+
+Add review of terms, such as, OOS, etc.
+
+
+May 13, 2014:
+
+- be clear on how to calculate weights
+
+- provide a section "implementation" before theory giving more details on those weights (cookbook)
+
+- call Mallows' weights Hansen's weights
+
+- try more models to see your statistic
+
+- differentiate population weight and sample weight
+
+- show sample weight converges to population weight
+
+- make introduction shorter
+
+- can remove literature review
+
+- define formally what "optimality" is
+
+- rewrite theorem 3.4
+
+- explain why and how information criterion matetrs for weighting
+
+- can delete tha table of information criteria
+
+- move lemma 3.1 to the definition of cross-validation
+
+- give a footnote on what "weak convergence" is
+
+- no worry for partial breaks
+
+- think about if you can make "delta" a vector
+
+- delete footbote 11
+
+- on theorem 3.2, be specific on what "equivalent" means
+
+- capitalize "Assumption 1"
+
+- just mention "it is a function of brownian bridge", delete "nonstandard"
+
+- be consistent on the notation of "e" tilda
+
+- be precise on theorem 3.4 resutls
+
+- put citation at the end of a sentence (after punctuation), no space needed
+
+- in proof, you used convergence in probability, not continous mapping theorem
+
+- in proof, you cite one theorem or lemma, not ciing an entire book chapter
+
+- delete those comments in your proof, they do not belong there

@@ -7,9 +7,9 @@
 # tau: break fraction relative to the training sample
 # delta: parameter controls break size
 # beta1: GARCH coefficient; if zero, then error follows an ARCH process
-# All parameter values are set to ensure regieme-wise stationarity and all GARCH model parameter restrictions
+# All parameter values are set to ensure regime-wise stationarity and all GARCH model parameter restrictions
 
-DGP.ar1<-function(T,P,Break=FALSE,hetero=FALSE, sigma=2, tau=0.3,delta=0.5, beta1=0){
+DGP.ar1 <- function(T, P, Break=FALSE, hetero=FALSE, sigma=2, tau=0.3, delta=0.5, beta1=0){
   
   if(missing(T)) T <- 100
   if(missing(P)) P <- floor(0.25 * T)
@@ -32,9 +32,7 @@ DGP.ar1<-function(T,P,Break=FALSE,hetero=FALSE, sigma=2, tau=0.3,delta=0.5, beta
     
     e <- rnorm((T+B),0,sigma)
     
-    for (i in 2:(T+B)) {
-      y[i] <- mu + rho*y[i-1] + e[i]
-    }
+    invisible(unlist(lapply(2:(T+B), function(i) y[i] <<- mu + rho*y[i-1] + e[i])))
     
     x <- y[B:(T+B-1)]
     y <- y[(B+1):(T+B)]
@@ -53,12 +51,8 @@ DGP.ar1<-function(T,P,Break=FALSE,hetero=FALSE, sigma=2, tau=0.3,delta=0.5, beta
       e <- rnorm((T+B),0,sigma)
       t0 <- floor(tau*R)
       
-      for (i in 2:(B+t0)) {
-        y[i] <- mu + rho*y[i-1] + e[i] 
-      }
-      for (i in (B+t0+1):(T+B)) {
-        y[i] <- delta*mu + delta*rho*y[i-1] + e[i]
-      }
+      invisible(unlist(lapply(2:(B+t0), function(i) y[i] <<- mu + rho*y[i-1] + e[i])))
+      invisible(unlist(lapply((B+t0+1):(T+B), function(i) y[i] <<- mu + rho*y[i-1] + e[i])))
       
       x <- y[B:(T+B-1)]
       y <- y[(B+1):(T+B)]
@@ -79,14 +73,8 @@ DGP.ar1<-function(T,P,Break=FALSE,hetero=FALSE, sigma=2, tau=0.3,delta=0.5, beta
     h[1] <- rnorm(1)^2
     e[1] <- v[1]*sqrt(h[1])
     
-    for (i in 2:(T+B)){
-      h[i] <- alpha0 + alpha1*e[i-1]^2 + beta1*h[i-1]
-      e[i] <- v[i]*sqrt(h[i])
-    }
-    
-    for (i in 2:(T+B)) {
-      y[i] <- mu + rho*y[i-1] + e[i]
-    }
+    invisible(unlist(lapply(2:(T+B), function(i) {h[i] <<- alpha0 + alpha1*e[i-1]^2 + beta1*h[i-1]; e[i] <<- v[i]*sqrt(h[i])})))
+    invisible(unlist(lapply(2:(T+B), function(i) y[i] <<- mu + rho*y[i-1] + e[i])))
     
     x <- y[B:(T+B-1)]
     y <- y[(B+1):(T+B)]
@@ -110,17 +98,9 @@ DGP.ar1<-function(T,P,Break=FALSE,hetero=FALSE, sigma=2, tau=0.3,delta=0.5, beta
       h[1] <- rnorm(1)^2
       e[1] <- v[1]*sqrt(h[1])
       
-      for (i in 2:(T+B)){
-        h[i] <- alpha0 + alpha1*e[i-1]^2 + beta1*h[i-1]
-        e[i] <- v[i]*sqrt(h[i])
-      }
-      
-      for (i in 2:(B+t0)) {
-        y[i] <- mu + rho*y[i-1] + e[i] 
-      }
-      for (i in (B+t0+1):(T+B)) {
-        y[i] <- delta*mu + delta*rho*y[i-1] + e[i]
-      }
+      invisible(unlist(lapply(2:(T+B), function(i) {h[i] <<- alpha0 + alpha1*e[i-1]^2 + beta1*h[i-1]; e[i] <<- v[i]*sqrt(h[i])})))
+      invisible(unlist(lapply(2:(B+t0), function(i) y[i] <<- mu + rho*y[i-1] + e[i])))
+      invisible(unlist(lapply((B+t0+1):(T+B), function(i) y[i] <<- delta*mu + delta*rho*y[i-1] + e[i])))
       
       x <- y[B:(T+B-1)]
       y <- y[(B+1):(T+B)]
