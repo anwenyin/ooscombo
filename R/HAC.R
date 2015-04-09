@@ -32,6 +32,7 @@ HAC <- function(X,e){
 }
 
 # EXAMPLE
+# This is an example for this function. It may not be efficient
 # X <- cbind(rep(1,100),matrix(rnorm(400,10,5),100,4))
 # beta <- matrix(c(2,1.2,1.8,-3,-0.5),5,1)
 # y <- X %*% beta + rnorm(100,0,10)
