@@ -29,7 +29,7 @@ goos <- function(y,X,P,Window=c("recursive","rolling"),Break=FALSE,tau=0){
   
   if (is.null(X)){
     
-	y <- as.matrix(y)
+	  y <- as.matrix(y)
     P <- as.numeric(P)
     tau <- as.numeric(tau)
     n <- length(y) # total sample size

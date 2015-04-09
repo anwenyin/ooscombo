@@ -5,7 +5,7 @@ feval<-function(y,X,P,theta=1,Window=c("recursive","rolling")) {
   if(P >= length(y)) stop("Prediction sample larger than total sample size!")
   Window<-match.arg(Window)
   
-  if(X == 0){
+  if(is.null(X)){
     
     y <- as.matrix(y)
     P <- as.numeric(P)
@@ -34,8 +34,8 @@ feval<-function(y,X,P,theta=1,Window=c("recursive","rolling")) {
     beta.gcv <- matrix(0,P,k+1)
     beta.bic <- matrix(0,P,k+1)
     beta.sw <- matrix(0,P,k+1)
-    bmodel.oos <- goos(y=y,X=0,P=P,Window=Window,Break=TRUE,tau=tau1)
-    smodel.oos <- goos(y=y,X=0,P=P,Window=Window)
+    bmodel.oos <- goos(y=y,X=NULL,P=P,Window=Window,Break=TRUE,tau=tau1)
+    smodel.oos <- goos(y=y,X=NULL,P=P,Window=Window)
     
     if (Window=="recursive") {
       
