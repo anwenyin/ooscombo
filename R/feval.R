@@ -23,7 +23,7 @@ feval<-function(y,X,P,theta=1,Window=c("recursive","rolling")) {
     smodel <- lm(yr~1)
     beta.f <- coef(smodel) # stable model coefficient
     
-    tau1 <- bdate(bound=0.15,Y=yr,X=0)$break.fraction
+    tau1 <- bdate(bound=0.15,Y=yr, X=X)$break.fraction
     
     F <- numeric(P)
     wcv <- numeric(P)

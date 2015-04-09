@@ -20,7 +20,7 @@ sse <- function(tau,Y,X,bound = 0.15){
     beta2 <- post$coef
     sse.b <- sum((Y1-beta1)^2) + sum((Y2 - beta2)^2)
     return(sse.b)
-  }
+  } else {
   
   n <- length(Y)
   tau <- floor(tau*n)
@@ -38,17 +38,30 @@ sse <- function(tau,Y,X,bound = 0.15){
   beta2 <- post$coef
   sse.b <- sum((Y1-X1%*%beta1)^2) + sum((Y2 - X2%*%beta2)^2)
   return(sse.b)
+  }
 }
 
 #EXAMPLE:
 #Y<-rnorm(100); X<-matrix(rnorm(300),100,3); sse(0.2,Y,X); sse(0.1,Y,X)
 
 bdate <- function(bound = 0.15,Y,X){
-  if(bound > 1 || bound < 0) stop("The bound parameter must fall into the interval[0, 1]!")
-  result <- optimise(sse,c(bound,1 - bound),Y=Y,X=X,bound = bound)
-  break.fraction <- result$min
-  break.date <- floor(break.fraction * length(Y))
-  return(list(break.fraction = break.fraction, break.date = break.date))
+  if(bound > 1 || bound < 0) stop("The bound parameter must fall into the interval[0, 1]!") 
+  
+  if (is.null(X)) {
+    
+    result <- optimise(sse,c(bound,1 - bound),Y=Y,X=X,bound = bound)
+    break.fraction <- result$min
+    break.date <- floor(break.fraction * length(Y))
+    return(list(break.fraction = break.fraction, break.date = break.date))
+    
+  } else {
+    
+    result <- optimise(sse,c(bound,1 - bound),Y=Y,X=X,bound = bound)
+    break.fraction <- result$min
+    break.date <- floor(break.fraction * length(Y))
+    return(list(break.fraction = break.fraction, break.date = break.date))
+    
+  }
 }
 
 #EXAMPLE:
