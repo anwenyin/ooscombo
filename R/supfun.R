@@ -9,7 +9,7 @@ pbar.val <- function(k,pi1=0.15){
 sse <- function(tau,Y,X,bound = 0.15){
   if(tau > 1 - bound || tau < bound) stop("The break fraction tau must fall into the bounded interval")
   
-  if(X == 0){
+  if(is.null(X)){
     n <- length(Y)
     tau <- floor(tau*n)
     Y1 <- Y[1:tau]
