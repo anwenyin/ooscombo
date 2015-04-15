@@ -29,7 +29,7 @@ gwa <- read.table("Data/gw13annual.txt", header=TRUE, sep="\t", stringsAsFactors
 # gwq: quarterly data, 572 obs of 22 variables
 # gwa: annual data, 143 obs of 21 variables
 
-# change format from "1,234" to "1234
+# change format from "1,234" to "1234"
 gwa <- within(gwa, Index <- gsub(",", "", Index))
 gwq <- within(gwq, Index <- gsub(",", "", Index))
 gwm <- within(gwm, Index <- gsub(",", "", Index))
@@ -38,34 +38,20 @@ gwa <- within(gwa, Index <- as.numeric(Index))
 gwq <- within(gwq, Index <- as.numeric(Index))
 gwm <- within(gwm, Index <- as.numeric(Index))
 
-gwq <- gwq[,c("yyyyp","Index","D12","E12","b.m","tbl","AAA","BAA","lty","ntis","Rfree","infl","ltr","corpr","svar","csp","ik")]
-
-gw <- gwq
-
-dta <- gw[305:540,] #1947.1 - 2005.4, Zhou and Rapach Sample
-#dta <- gw[305:568,] #1947.1 - 2012.4, New Sample
-
-n <- nrow(dta) # 236 obs
-P<-164
-
-dta.ret <- ts(gw[304:540,], start=c(1946,4), freq=4)
 
 
-ret <- (dta.ret[dta.ret[,1] >= 19471,'Index'] + dta.ret[dta.ret[,1] >= 19471,'D12'])/dta.ret[dta.ret[,1] >= 19464 & dta.ret[,1] <= 20053,'Index'] - 1
+# For quarterly data
+# gw <- gwq
 
+dta <- ts(gwq[gwq$yyyyq >= 19464,], start=c(1946,4), freq=4) #1947.1 - 2005.4, Zhou and Rapach Sample
+n <- nrow(dta) - 1 # 236 obs
+# P<-164
 
-dta <- gw[305:540,] #1947.1 - 2005.4, Zhou and Rapach Sample
-#dta <- gw[305:568,] #1947.1 - 2012.4, New Sample
+ret <- (dta[dta[,1] >= 19471,'Index'] + dta[dta[,1] >= 19471,'D12'])/(dta[dta[,1] >= 19464 & dta[,1] <= 20133,'Index']) - 1
+ret <- ts(ret, start=c(1947,1), freq=4)
+e.ret <- log1p(ret) - log1p(dta[,"Rfree"]) # excess returns
 
-n <- nrow(dta) # 236 obs
-P<-164
-
-dta.ret <- ts(gw[304:540,], start=c(1946,4), freq=4)
-# dta.ret <- ts(gw[304:568,]) # New Sample
-ret <- (dta.ret[,'Index'] + dta.ret[,'D12'])/lag(dta.ret[,'Index'],k=-1)-1
-e.ret <- log1p(ret)-log1p(dta$Rfree) # excess return
-dy <- log(dta.ret[,'D12'])-log(lag(dta.ret[,'Index'],-1))
-
+dy <- log(dta[dta[,1] >= 19471,'D12']) - log(dta[dta[,1] >= 19464 & dta[,1] <= 20133,'Index']) # dividend yield
 
 dp<-(log(dta$D12)-log(dta$Index)) # log divident price ratio
 ep<-(log(dta$E12)-log(dta$Index)) # log earnings price ratio
