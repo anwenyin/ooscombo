@@ -17,8 +17,8 @@ T <- 5000
 #######################################################################################
 
 
-for (i in c(0.01,0.1,0.2,0.3,0.4)){
-  for (j in c(30,50)){
+for (i in c(0.01,0.1,0.2,0.4,0.5)){
+  for (j in c(30)){
     sim <- matrix(nrow=T,ncol=7)
     for (m in 1:T){
       dta <- DGP.wild(T=200, P=j, sigma=2, tau=0.3,delta=i)
@@ -34,7 +34,7 @@ for (i in c(0.01,0.1,0.2,0.3,0.4)){
       sim[m,7] <- temp[1,7]
     }
     result <- matrix(nrow=2,ncol=7)
-    colnames(result) <- c("Cp","CV","SIC","S-W","Equal","Break","Stable")
+    colnames(result) <- c("Cp","CV","SIC","S-W","Equal","Stable","Break")
     rownames(result) <- c("RMSFE","Ratio")
     result[1,] <-apply(sim,2,mean)
     for (s in 1:7) result[2,s] <- result[1,s]/result[1,5]
@@ -49,9 +49,9 @@ for (i in c(0.01,0.1,0.2,0.3,0.4)){
 # In this case, the DGP is AR(2) plus 2, but the forecasting model is just 2 predictors.	  #
 #																					  
 #######################################################################################
-
-for (i in c(0.01,0.1,0.2,0.3,0.4)){
-  for (j in c(30,50)){
+t0 <- proc.time()
+for (i in c(0.8, 0.7, 0.6, 0.5, 0.49, 0.48, 0.4, 0.2, 0.1, 0.01)){
+  for (j in c(30)){
     sim <- matrix(nrow=T,ncol=7)
     for (m in 1:T){
       dta <- DGP.wild(T=200, P=j, sigma=2, tau=0.3,delta=i)
@@ -67,7 +67,7 @@ for (i in c(0.01,0.1,0.2,0.3,0.4)){
       sim[m,7] <- temp[1,7]
     }
     result <- matrix(nrow=2,ncol=7)
-    colnames(result) <- c("Cp","CV","SIC","S-W","Equal","Break","Stable")
+    colnames(result) <- c("Cp","CV","SIC","S-W","Equal","Stable","Break")
     rownames(result) <- c("RMSFE","Ratio")
     result[1,] <-apply(sim,2,mean)
     for (s in 1:7) result[2,s] <- result[1,s]/result[1,5]
@@ -76,5 +76,5 @@ for (i in c(0.01,0.1,0.2,0.3,0.4)){
     cat("\n")
   }
 }
-
+proc.time() - t0
 print("This simulation is done!")

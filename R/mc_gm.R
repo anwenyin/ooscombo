@@ -1,4 +1,4 @@
-
+setwd("M:/My R Projects/ooscombo/ooscombo")
 rm(list=ls())
 source('R/dgp_ar1.R')
 source('R/dgp_ar2and5.R')
@@ -18,9 +18,9 @@ T <- 5000
 #######################################################################################
 
 
-
-for (i in c(0.01,0.1,0.2,0.3,0.4)){
-  for (j in c(30,50)){
+t0 <- proc.time()
+for (i in c(0.8, 0.7, 0.6, 0.5, 0.49, 0.48, 0.4, 0.2, 0.1, 0.01)){
+  for (j in c(30)){
     sim <- matrix(nrow=T,ncol=7)
     for (m in 1:T){
       dta <- DGP.gm(T=200,P=j,Break=TRUE,hetero=FALSE, sigma=4, tau=0.5,delta=i,delta_gm=0.5)
@@ -36,7 +36,7 @@ for (i in c(0.01,0.1,0.2,0.3,0.4)){
       sim[m,7] <- temp[1,7]
     }
     result <- matrix(nrow=2,ncol=7)
-    colnames(result) <- c("Cp","CV","SIC","S-W","Equal","Break","Stable")
+    colnames(result) <- c("Cp","CV","SIC","S-W","Equal","Stable","Break")
     rownames(result) <- c("RMSFE","Ratio")
     result[1,] <-apply(sim,2,mean)
     for (s in 1:7) result[2,s] <- result[1,s]/result[1,5]
@@ -45,6 +45,10 @@ for (i in c(0.01,0.1,0.2,0.3,0.4)){
     cat("\n")
   }
 }
+
+proc.time() - t0
+print("This simulation is done!")
+
 
 #######################################################################################
 #        																	  
@@ -69,7 +73,7 @@ for (i in c(0.01,0.1,0.2,0.3,0.4)){
       sim[m,7] <- temp[1,7]
     }
     result <- matrix(nrow=2,ncol=7)
-    colnames(result) <- c("Cp","CV","SIC","S-W","Equal","Break","Stable")
+    colnames(result) <- c("Cp","CV","SIC","S-W","Equal","Stable","Break")
     rownames(result) <- c("RMSFE","Ratio")
     result[1,] <-apply(sim,2,mean)
     for (s in 1:7) result[2,s] <- result[1,s]/result[1,5]
