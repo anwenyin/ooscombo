@@ -1,8 +1,4 @@
 rm(list=ls())
-library(sandwich)
-source('R/goos.r')
-source('R/feval.r')
-source('R/supfun.r')
 
 #############################################################
 ##############  Goyal-Welch 2013 Data #######################
@@ -47,3 +43,82 @@ e.ret.a <- log1p(ret.a) - log1p(gwa[gwa[,1] >= 1926, "Rfree"]) # annual data exc
 # plot.ts(e.ret.q, col="steelblue")
 # plot.ts(e.ret.a, col="steelblue")
 
+# gwm <- gwm[gwm[,1] >= 192611, ]
+# gwq <- gwq[gwq[,1] >= 19463, ]
+# gwa <- gwa[gwa[,1] >= 1925, ]
+
+# Monthly Data Variables
+
+dp.m <- log(gwm[gwm[,1] >= 192612,'D12']) - log(gwm[gwm[,1] >= 192612,'Index']) 
+dy.m <- log(gwm[gwm[,1] >= 192612,'D12']) - log(gwm[gwm[,1] >= 192611 & gwm[,1] <= 201311,'Index'])
+ep.m <- log(gwm[gwm[,1] >= 192612,'E12']) - log(gwm[gwm[,1] >= 192612,'Index'])
+de.m <- log(gwm[gwm[,1] >= 192612,'D12']) - log(gwm[gwm[,1] >= 192612,'E12'])
+
+tms.m <- gwm[gwm[,1] >= 192612,'lty'] - gwm[gwm[,1] >= 192612,'tbl']
+dfy.m <- gwm[gwm[,1] >= 192612,'BAA'] - gwm[gwm[,1] >= 192612,'AAA']
+dfr.m <- gwm[gwm[,1] >= 192612,'corpr'] - gwm[gwm[,1] >= 192612,'ltr']
+
+svar.m <- gwm[gwm[,1] >= 192612,'svar']
+bm.m <-   gwm[gwm[,1] >= 192612,'b.m']
+ntis.m <- gwm[gwm[,1] >= 192612,'ntis']
+tbl.m <-  gwm[gwm[,1] >= 192612,'tbl']
+lty.m <-  gwm[gwm[,1] >= 192612,'lty']
+ltr.m <-  gwm[gwm[,1] >= 192612,'ltr']
+infl.m <- gwm[gwm[,1] >= 192612,'infl']
+
+dta.month <- as.data.frame(cbind(dp.m, dy.m, ep.m, de.m, tms.m, dfy.m, dfr.m, svar.m, bm.m, ntis.m, tbl.m, lty.m, ltr.m, infl.m))
+dta.month <-  cbind(e.ret.m[-1], dta.month[-nrow(dta.month),])
+names(dta.month) <- c("e.ret","dp","dy","ep","de","tms","dfy","dfr","svar","bm","ntis","tbl","lty","ltr","infl")
+
+# Quarterly Data Variables
+
+dp.q <- log(gwq[gwq[,1] >= 19464,'D12']) - log(gwq[gwq[,1] >= 19464,'Index']) 
+dy.q <- log(gwq[gwq[,1] >= 19464,'D12']) - log(gwq[gwq[,1] >= 19463 & gwq[,1] <= 20133,'Index'])
+ep.q <- log(gwq[gwq[,1] >= 19464,'E12']) - log(gwq[gwq[,1] >= 19464,'Index'])
+de.q <- log(gwq[gwq[,1] >= 19464,'D12']) - log(gwq[gwq[,1] >= 19464,'E12'])
+
+tms.q <- gwq[gwq[,1] >= 19464,'lty'] - gwq[gwq[,1] >= 19464,'tbl']
+dfy.q <- gwq[gwq[,1] >= 19464,'BAA'] - gwq[gwq[,1] >= 19464,'AAA']
+dfr.q <- gwq[gwq[,1] >= 19464,'corpr'] - gwq[gwq[,1] >= 19464,'ltr']
+
+svar.q <- gwq[gwq[,1] >= 19464,'svar']
+bm.q <-   gwq[gwq[,1] >= 19464,'b.m']
+ntis.q <- gwq[gwq[,1] >= 19464,'ntis']
+tbl.q <-  gwq[gwq[,1] >= 19464,'tbl']
+lty.q <-  gwq[gwq[,1] >= 19464,'lty']
+ltr.q <-  gwq[gwq[,1] >= 19464,'ltr']
+infl.q <- gwq[gwq[,1] >= 19464,'infl']
+ik.q <-   gwq[gwq[,1] >= 19464,'ik']
+
+dta.quarter <- as.data.frame(cbind(dp.q, dy.q, ep.q, de.q, tms.q, dfy.q, dfr.q, svar.q, bm.q, ntis.q, tbl.q, lty.q, ltr.q, infl.q, ik.q))
+dta.quarter <-  cbind(e.ret.q[-1], dta.quarter[-nrow(dta.quarter),])
+names(dta.quarter) <- c("e.ret","dp","dy","ep","de","tms","dfy","dfr","svar","bm","ntis","tbl","lty","ltr","infl","ik")
+
+# Annual Data Variables
+
+dp.a <- log(gwa[gwa[,1] >= 1926,'D12']) - log(gwa[gwa[,1] >= 1926,'Index']) 
+dy.a <- log(gwa[gwa[,1] >= 1926,'D12']) - log(gwa[gwa[,1] >= 1925 & gwa[,1] <= 2012,'Index'])
+ep.a <- log(gwa[gwa[,1] >= 1926,'E12']) - log(gwa[gwa[,1] >= 1926,'Index'])
+de.a <- log(gwa[gwa[,1] >= 1926,'D12']) - log(gwa[gwa[,1] >= 1926,'E12'])
+
+tms.a <- gwa[gwa[,1] >= 1926,'lty'] - gwa[gwa[,1] >= 1926,'tbl']
+dfy.a <- gwa[gwa[,1] >= 1926,'BAA'] - gwa[gwa[,1] >= 1926,'AAA']
+dfr.a <- gwa[gwa[,1] >= 1926,'corpr'] - gwa[gwa[,1] >= 1926,'ltr']
+
+svar.a <- gwa[gwa[,1] >= 1926,'svar']
+bm.a <-   gwa[gwa[,1] >= 1926,'b.m']
+ntis.a <- gwa[gwa[,1] >= 1926,'ntis']
+tbl.a <-  gwa[gwa[,1] >= 1926,'tbl']
+lty.a <-  gwa[gwa[,1] >= 1926,'lty']
+ltr.a <-  gwa[gwa[,1] >= 1926,'ltr']
+infl.a <- gwa[gwa[,1] >= 1926,'infl']
+ik.a <-   gwa[gwa[,1] >= 1926,'ik']
+eqis.a <- gwa[gwa[,1] >= 1926,'eqis']
+
+dta.annual <- as.data.frame(cbind(dp.a, dy.a, ep.a, de.a, tms.a, dfy.a, dfr.a, svar.a, bm.a, ntis.a, tbl.a, lty.a, ltr.a, infl.a, ik.a, eqis.a))
+dta.annual <-  cbind(e.ret.a[-1], dta.annual[-nrow(dta.annual),])
+names(dta.annual) <- c("e.ret","dp","dy","ep","de","tms","dfy","dfr","svar","bm","ntis","tbl","lty","ltr","infl","ik","eqis")
+
+write.table(dta.annual, "Data/gw_annual_1927_2013.txt", row.names=FALSE)
+write.table(dta.quarter, "Data/gw_quarter_19471_20134.txt", row.names=FALSE)
+write.table(dta.month, "Data/gw_month_192701_201312.txt", row.names=FALSE)
