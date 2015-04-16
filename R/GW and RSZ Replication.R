@@ -24,7 +24,7 @@ par(mfrow = c(4,4))
 
 benchmark <- ts(cumsum(feval(y=e.ret,X=NULL,P=P)$sfe[,'Stable']),start=c(1965,1), freq=4)
 
-plot.ts(benchmark - cumsum(feval(y=e.ret,X=dp,P=P)$sfe[,method]),col=4,ylab="", xlab="", ylim=c(-0.156, 0.1),main=paste('dp'), xlim=c());abline(h=0,col=2,lty=2)
+plot.ts(benchmark - cumsum(feval(y=e.ret,X=dp,P=P)$sfe[,method]),col=4,ylab="", xlab="", ylim=c(-0.156, 0.1),main=paste('dp'));abline(h=0,col=2,lty=2)
 plot.ts(benchmark - cumsum(feval(y=e.ret,X=dy,P=P)$sfe[,method]),col=4,ylab="", xlab="", ylim=c(-0.156, 0.1),main=paste('dy'));abline(h=0,col=2,lty=2)
 plot.ts(benchmark - cumsum(feval(y=e.ret,X=ep,P=P)$sfe[,method]),col=4,ylab="", xlab="", ylim=c(-0.156, 0.1),main=paste('ep'));abline(h=0,col=2,lty=2)
 plot.ts(benchmark - cumsum(feval(y=e.ret,X=de,P=P)$sfe[,method]),col=4,ylab="", xlab="", ylim=c(-0.156, 0.1),main=paste('de'));abline(h=0,col=2,lty=2)
@@ -41,3 +41,32 @@ plot.ts(benchmark - cumsum(feval(y=e.ret,X=infl,P=P)$sfe[,method]),col=4,ylab=""
 
 dev.off()
 detach(gw.q)
+
+##### Annual Data ###
+
+attach(gw.a)
+
+method <- 'Stable'
+P <- P.a
+
+par(mfrow = c(4,4))
+
+benchmark <- ts(cumsum(feval(y=e.ret,X=NULL,P=P)$sfe[,'Stable']),start=c(1965), freq=1)
+
+plot.ts(benchmark - cumsum(feval(y=e.ret,X=dp,P=P)$sfe[,method]),col=4,ylab="", xlab="", ylim=c(-0.2, 0.15),main=paste('dp'));abline(h=0,col=2,lty=2)
+plot.ts(benchmark - cumsum(feval(y=e.ret,X=dy,P=P)$sfe[,method]),col=4,ylab="", xlab="", ylim=c(-0.2, 0.15),main=paste('dy'));abline(h=0,col=2,lty=2)
+plot.ts(benchmark - cumsum(feval(y=e.ret,X=ep,P=P)$sfe[,method]),col=4,ylab="", xlab="", ylim=c(-0.2, 0.15),main=paste('ep'));abline(h=0,col=2,lty=2)
+plot.ts(benchmark - cumsum(feval(y=e.ret,X=de,P=P)$sfe[,method]),col=4,ylab="", xlab="", ylim=c(-0.2, 0.15),main=paste('de'));abline(h=0,col=2,lty=2)
+plot.ts(benchmark - cumsum(feval(y=e.ret,X=tms,P=P)$sfe[,method]),col=4,ylab="", xlab="", ylim=c(-0.2, 0.15),main=paste('tms'));abline(h=0,col=2,lty=2)
+plot.ts(benchmark - cumsum(feval(y=e.ret,X=dfy,P=P)$sfe[,method]),col=4,ylab="", xlab="", ylim=c(-0.2, 0.15),main=paste('dfy'));abline(h=0,col=2,lty=2)
+plot.ts(benchmark - cumsum(feval(y=e.ret,X=dfr,P=P)$sfe[,method]),col=4,ylab="", xlab="", ylim=c(-0.2, 0.15),main=paste('dfr'));abline(h=0,col=2,lty=2)
+plot.ts(benchmark - cumsum(feval(y=e.ret,X=svar,P=P)$sfe[,method]),col=4,ylab="", xlab="", ylim=c(-0.2, 0.15),main=paste('svar'));abline(h=0,col=2,lty=2)
+plot.ts(benchmark - cumsum(feval(y=e.ret,X=bm,P=P)$sfe[,method]),col=4,ylab="", xlab="", ylim=c(-0.2, 0.15),main=paste('bm'));abline(h=0,col=2,lty=2)
+plot.ts(benchmark - cumsum(feval(y=e.ret,X=ntis,P=P)$sfe[,method]),col=4,ylab="", xlab="", ylim=c(-0.2, 0.15),main=paste('ntis'));abline(h=0,col=2,lty=2)
+plot.ts(benchmark - cumsum(feval(y=e.ret,X=tbl,P=P)$sfe[,method]),col=4,ylab="", xlab="", ylim=c(-0.2, 0.15),main=paste('tbl'));abline(h=0,col=2,lty=2)
+plot.ts(benchmark - cumsum(feval(y=e.ret,X=lty,P=P)$sfe[,method]),col=4,ylab="", xlab="", ylim=c(-0.2, 0.15),main=paste('lty'));abline(h=0,col=2,lty=2)
+plot.ts(benchmark - cumsum(feval(y=e.ret,X=ltr,P=P)$sfe[,method]),col=4,ylab="", xlab="", ylim=c(-0.2, 0.15),main=paste('ltr'));abline(h=0,col=2,lty=2)
+plot.ts(benchmark - cumsum(feval(y=e.ret,X=infl,P=P)$sfe[,method]),col=4,ylab="", xlab="", ylim=c(-0.2, 0.15),main=paste('infl'));abline(h=0,col=2,lty=2)
+
+detach(gw.a)
+print("DONE!")
