@@ -9,7 +9,7 @@ gw.a <- read.table("Data/gw_annual_1927_2013.txt", sep="|", header=TRUE)
 library("corrplot")
 
 gw.q.1 <- gw.q[,-length(gw.q)]
-gw.a.1 <- gw.q[,-c(16,17)]
+gw.a.1 <- gw.a[,-c(16,17)]
 
 corrplot(cor(gw.m), method = "circle", diag = FALSE) # type = "lower" 
 corrplot(cor(gw.q.1), method = "circle", diag = FALSE)
