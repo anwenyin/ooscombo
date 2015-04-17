@@ -4,6 +4,17 @@ gw.m <- read.table("Data/gw_month_192701_201312.txt", sep="|", header=TRUE)
 gw.q <- read.table("Data/gw_quarter_19471_20134.txt", sep="|", header=TRUE)
 gw.a <- read.table("Data/gw_annual_1927_2013.txt", sep="|", header=TRUE)
 
+# Correlation Matrix Plot
+
+library("corrplot")
+
+gw.q.1 <- gw.q[,-length(gw.q)]
+gw.a.1 <- gw.q[,-c(16,17)]
+
+corrplot(cor(gw.m), method = "circle", diag = FALSE) # type = "lower" 
+corrplot(cor(gw.q.1), method = "circle", diag = FALSE)
+corrplot(cor(gw.a.1), method = "circle", diag = FALSE)
+
 #### Monthly Data #########################################
 
 pdf(file="Graph/monthly_matrix_plot.pdf", width = 13)
