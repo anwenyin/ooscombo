@@ -11,9 +11,17 @@ library("corrplot")
 gw.q.1 <- gw.q[,-length(gw.q)]
 gw.a.1 <- gw.a[,-c(16,17)]
 
+pdf(file="Graph/monthly_data_corr_mplot.pdf")
 corrplot(cor(gw.m), method = "circle", diag = FALSE) # type = "lower" 
+dev.off()
+
+pdf(file="Graph/quarterly_data_corr_mplot.pdf")
 corrplot(cor(gw.q.1), method = "circle", diag = FALSE)
+dev.off()
+
+pdf(file="Graph/annual_data_corr_mplot.pdf")
 corrplot(cor(gw.a.1), method = "circle", diag = FALSE)
+dev.off()
 
 #### Monthly Data #########################################
 
