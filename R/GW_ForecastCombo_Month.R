@@ -73,7 +73,7 @@ R <- T - P
 yp <- e.ret[(R+1):T]
 sfe.combo <- (yp - f.combo)^2
 
-plot.ts(ts(cumsum(benchmark)-cumsum(sfe.combo), start=c(1957,1), freq=12),col=4,ylim=c(-0.156, 0.156),xlab="",ylab="CDSFE",main=paste(method));abline(h=0,col=2,lty=2)       
+plot.ts(ts(cumsum(benchmark)-cumsum(sfe.combo), start=c(1957,1), freq=12),col=4,ylim=c(-0.156, 0.156),xlab="",ylab="CDSFE",main=paste("DMSFE"));abline(h=0,col=2,lty=2)       
 
 R2.SW <- 100*(1 - sum(sfe.combo)/sum(benchmark))      
 
@@ -127,7 +127,7 @@ R <- T - P
 yp <- e.ret[(R+1):T]
 sfe.combo <- (yp - f.combo)^2
 
-plot.ts(ts(cumsum(benchmark)-cumsum(sfe.combo), start=c(1957,1), freq=12),col=4,ylim=c(-0.156, 0.156),xlab="",ylab="CDSFE",main=paste("DMSFE"));abline(h=0,col=2,lty=2)       
+plot.ts(ts(cumsum(benchmark)-cumsum(sfe.combo), start=c(1957,1), freq=12),col=4,ylim=c(-0.156, 0.156),xlab="",ylab="CDSFE",main=paste("SIC"));abline(h=0,col=2,lty=2)       
 
 R2.SIC <- 100*(1 - sum(sfe.combo)/sum(benchmark)) 
 
